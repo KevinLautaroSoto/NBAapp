@@ -18,7 +18,7 @@ public class Player {
     //nba team
     @ManyToOne
     @JoinColumn(name = "equipoId")
-    private Long team_id;
+    private Team team;
 
     public Player () {} //Default Constructor
 
@@ -86,12 +86,12 @@ public class Player {
         this.country = country;
     }
 
-    public Long getTeam_id() {
-        return team_id;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setTeam_id(Long team_id) {
-        this.team_id = team_id;
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
     @Override
@@ -105,7 +105,7 @@ public class Player {
                 ", height=" + height +
                 ", weight=" + weight +
                 ", country='" + country + '\'' +
-                ", team_id=" + team_id +
+                ", team=" + team +
                 '}';
     }
 }
