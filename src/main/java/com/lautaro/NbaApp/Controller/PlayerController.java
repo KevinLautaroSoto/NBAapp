@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/player")
-public class playerController {
+public class PlayerController {
     @Autowired
     private PlayerService playerService;
 
