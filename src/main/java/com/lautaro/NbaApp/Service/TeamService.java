@@ -73,7 +73,7 @@ public class TeamService {
 
             teamRepository.delete(teamToDelete);
 
-            return ResponseEntity.ok("Team successfully deleted from the database.");
+            return ResponseEntity.ok("Team with ID: " + id +  "successfully deleted from the database.");
         } catch (DataAccessException e) {
             throw new CustomDatabaseException("Error deleting team from the database.");
         }

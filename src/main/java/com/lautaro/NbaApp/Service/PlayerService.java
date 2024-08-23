@@ -7,6 +7,7 @@ import com.lautaro.NbaApp.Utilities.PlayerMapper;
 import com.lautaro.NbaApp.exceptions.CustomDatabaseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +28,9 @@ public class PlayerService {
             Player newPlayer = new Player();
             PlayerMapper.mapToPlayer(newPlayer, playerDto);
             playerRepository.save(newPlayer);
-            return ResponseEntity.ok("Player successfully created.");
+            return ResponseEntity.status(HttpStatus.CREATED).body("Player successfully created.");
         } catch (DataAccessException e) {
-            return ResponseEntity.status(500).body("Error creating player: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error crating player: " + e.getMessage());
         }
     }
 
@@ -52,23 +53,28 @@ public class PlayerService {
     }
 
     //update player
-    public Player updatedPlayer(Long id, PlayerDto playerDto) {
+    public Player updatePlayer(Long id, PlayerDto playerDto) {
         try {
             Player playerToUpdate = playerRepository.findById(id)
-                    .orElseThrow(() -> new CustomDatabaseException("Team not found with ID: " + id));
+                    .orElseThrow(() -> new CustomDatabaseException("Player not found with ID: " + id));
 
             PlayerMapper.mapToPlayer(playerToUpdate, playerDto);
-
-            return playerToUpdate;
+            return playerRepository.save(playerToUpdate);
         } catch (DataAccessException e) {
             throw new CustomDatabaseException("Error updating player with ID: " + id, e);
         }
     }
 
     //delete player
-    public ResponseEntity<String> deleteTeam(Long id) {
+    public ResponseEntity<String> deletePlayer(Long id) {
         try {
+            Player playerToDelete = playerRepository.findById(id)
+                    .orElseThrow(() -> new CustomDatabaseException("Player not found a player with ID: " + id));
 
+            playerRepository.delete(playerToDelete);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Player successfully deleted from the database.");
+        } catch (DataAccessException e) {
+            throw new CustomDatabaseException("Error deleting player from the database: ", e);
         }
     }
 }
