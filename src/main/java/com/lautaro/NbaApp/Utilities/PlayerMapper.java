@@ -6,12 +6,10 @@ import com.lautaro.NbaApp.Models.Player;
 public class PlayerMapper {
     //Convert a PlayerDto to a Player.
 
-    public static Player mapToPlayer(PlayerDto playerDto) {
+    public static Player mapToPlayer(Player player, PlayerDto playerDto) {
         if (playerDto == null) {
             return null;
         }
-
-        Player player = new Player();
 
         player.setName(playerDto.getName());
         player.setLastName(playerDto.getLastName());

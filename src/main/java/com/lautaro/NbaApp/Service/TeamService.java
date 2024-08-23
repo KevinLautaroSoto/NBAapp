@@ -17,7 +17,6 @@ import java.util.Optional;
 public class TeamService {
 
     private final TeamRepository teamRepository;
-    private TeamMapper teamMapper;
 
     @Autowired
     private TeamService(TeamRepository teamRepository) {this.teamRepository = teamRepository;}
@@ -58,15 +57,7 @@ public class TeamService {
             Team teamUpdated = teamRepository.findById(id)
                     .orElseThrow(() -> new CustomDatabaseException("Team not found with ID: " + id));
 
-            teamUpdated.setName(teamDto.getName());
-            teamUpdated.setCity(teamDto.getCity());
-            teamUpdated.setConference(teamDto.getConference());
-            teamUpdated.setPrimaryColor(teamDto.getPrimaryColor());
-            teamUpdated.setSecondaryColor(teamDto.getSecondaryColor());
-            teamUpdated.setTerciaryColor(teamDto.getTerciaryColor());
-            teamUpdated.setLogoUrl(teamDto.getLogoUrl());
-            teamUpdated.setStadiumName(teamDto.getStadiumName());
-            teamUpdated.setHeadcoach(teamDto.getHeadcoach());
+            TeamMapper.mapToTeam(teamUpdated, teamDto);
 
             return teamRepository.save(teamUpdated);
         } catch (DataAccessException e) {
@@ -82,7 +73,7 @@ public class TeamService {
 
             teamRepository.delete(teamToDelete);
 
-            return ResponseEntity.ok("Team successfully deleted from the database.");
+            return ResponseEntity.ok("Team with ID: " + id +  "successfully deleted from the database.");
         } catch (DataAccessException e) {
             throw new CustomDatabaseException("Error deleting team from the database.");
         }
