@@ -31,7 +31,7 @@ public class PlayerController {
         return playerService.getPlayerById(id);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public Player updatePlayer(@PathVariable Long id, @RequestBody PlayerDto playerDto) {
         return playerService.updatePlayer(id, playerDto);
     }
