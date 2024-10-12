@@ -28,4 +28,11 @@ public class DataInitializer {
             System.out.println("Respuesta de los jugadores: " + response);
         });
     }
+
+    @Bean
+    public ApplicationRunner applicationRunner() {
+        return args -> {
+            initialize(); //Ejecuta el método initialize al arrancar la aplicación.
+        };
+    }
 }
