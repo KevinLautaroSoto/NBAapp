@@ -2,6 +2,7 @@ package com.lautaro.NbaApp.config;
 
 import com.lautaro.NbaApp.Repository.TeamRepository;
 import com.lautaro.NbaApp.Service.ExternalApiService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,22 +10,22 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DataInitializer {
 
-    private final TeamRepository teamRepository;
     private final ExternalApiService externalApiService;
 
-    public DataInitializer(TeamRepository teamRepository, ExternalApiService externalApiService) {
-        this.teamRepository = teamRepository;
+    @Autowired
+    public DataInitializer(ExternalApiService externalApiService) {
         this.externalApiService = externalApiService;
     }
 
-    @Bean
-    public ApplicationRunner initializeDatabase() {
-        return args -> {
-            //Verifica si la base de datos está vacía
-            if (teamRepository.count() == 0) {
-                //Llama al servicio para obtener y cargar los datos.
-                externalApiService.fetchAndSaveDataFromApi();
-            }
-        };
+    public void initialize() {
+        // Obtener y mostrar los equipos.
+        externalApiService.getTeams().subscribe(response -> {
+            System.out.println("Respuesta de los equipos: " + response);
+        });
+
+        // Obtener y mostrar los jugadores.
+        externalApiService.getPlayers().subscribe(response -> {
+            System.out.println("Respuesta de los jugadores: " + response);
+        });
     }
 }

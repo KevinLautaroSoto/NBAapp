@@ -2,35 +2,36 @@ package com.lautaro.NbaApp.Service;
 
 import com.lautaro.NbaApp.Models.Team;
 import com.lautaro.NbaApp.Repository.TeamRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 @Service
 public class ExternalApiService {
     private final WebClient webClient;
-    private final TeamRepository teamRepository;
 
-
-    public ExternalApiService(WebClient webClient, TeamRepository teamRepository) {
+    @Autowired
+    public ExternalApiService(WebClient webClient) {
         this.webClient = webClient;
-        this.teamRepository = teamRepository;
     }
 
-    //Método que hace la llamada a la API externa y guarda los dato sne la base de datos.
-    public void fetchAndSaveDataFromApi() {
-        //hacer la llamada get a la API externa
-        List<Team> dataFromApi = webClient.get()
-                .uri("/endpoint") //Define el endpoint de la API externa.
-                .retrieve() //Realiza la llamada
-                .bodyToMono(new ParametrizedTypeReference<List<Team>>() {}) // Convierte la respueste en List<Team>
-                .block(); //Bloquea la ejecución hasta recibir la respuesta.
+    //Método para obtener los equipos de la API
+    public Mono<String> getTeams() {
+        return webClient.get()
+                .uri("/teams/?per_page=50&page=1") // URI específica para los equipos
+                .retrieve()
+                .bodyToMono(String.class); // Obtén el cuerpo de la respuesta como un String
+    }
 
-        // Guardar los datos en la base de datos
-        if (dataFromApi != null && !dataFromApi.isEmpty()) {
-            teamRepository.saveAll(dataFromApi);
-        }
+    //Método para obtener los jugadores de la API
+    public Mono<String> getPlayers() {
+        return webClient.get()
+                .uri("/players/?page=1&per_page=50") // URI específica para los jugadores
+                .retrieve()
+                .bodyToMono(String.class); // Obtén el cuerpo de la respuesta como un String
     }
 }
