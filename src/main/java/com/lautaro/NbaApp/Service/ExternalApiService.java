@@ -23,6 +23,8 @@ public class ExternalApiService {
     private final TeamRepository teamRepository;
     private final PlayerRepository playerRepository;
 
+    private int cursor = 0;
+
     @Autowired
     public ExternalApiService(WebClient webClient, TeamRepository teamRepository, PlayerRepository playerRepository) {
         this.webClient = webClient;
@@ -58,15 +60,15 @@ public class ExternalApiService {
     }
 
     public Mono<PlayerDto[]> getAllPlayers() {
-        return fetchPlayers(1, new ArrayList<>()); //Inicia la paginacion en 1 y una lista vacia.
+        return fetchPlayers(cursor, new ArrayList<>()); //Inicia la paginacion en 1 y una lista vacia.
     }
 
     //Método para obtener los jugadores de la API
-    private Mono<PlayerDto[]> fetchPlayers(int page, List<PlayerDto> allPlayers) {
+    private Mono<PlayerDto[]> fetchPlayers(int cursor, List<PlayerDto> allPlayers) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/players")
-                        .queryParam("page", page) //Add page param
+                        .queryParam("cursor", cursor) //Add page param
                         .queryParam("per_page", 100) // set max results per page.
                         .build())
                 .retrieve()
@@ -95,8 +97,8 @@ public class ExternalApiService {
                     });
 
                     //Verifica si hay mas jugadores que cargar.
-                    if (playerResponse.getMeta().getNextCursor() != null && playerResponse.getMeta().getNextCursor() > page) {
-                        return fetchPlayers(page + 1, allPlayers);//Llama recursivamente para la siguiente pagina.
+                    if (players.size() == 100) {
+                        return fetchPlayers(cursor + 100, allPlayers);//Llama recursivamente para la siguiente pagina.
                     } else {
                         return Mono.just(allPlayers.toArray(new PlayerDto[0]));//Convierte la lista acumulada a un array y lo retorna.
                     }
