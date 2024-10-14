@@ -2,10 +2,7 @@ package com.lautaro.NbaApp.Utilities;
 
 import com.lautaro.NbaApp.Controller.Dto.PlayerDto;
 import com.lautaro.NbaApp.Models.Player;
-import com.lautaro.NbaApp.Models.Team;
 import com.lautaro.NbaApp.Service.TeamService;
-
-import java.util.NoSuchElementException;
 
 public class PlayerMapper {
     //Convert a PlayerDto to a Player.
@@ -26,11 +23,7 @@ public class PlayerMapper {
         player.setDraft_year(playerDto.getDraft_year());
         player.setDraft_round(playerDto.getDraft_round());
         player.setDraft_number(playerDto.getDraft_number());
-
-        Team teamSearched = teamService.getTeamById(playerDto.getTeamId())
-                        .orElseThrow(() -> new NoSuchElementException("Team not found with ID: " + playerDto.getTeamId()));
-
-        player.setTeam(teamSearched);
+        player.setTeam(playerDto.getTeam());
 
         return player;
     }

@@ -1,5 +1,7 @@
 package com.lautaro.NbaApp.Controller.Dto;
 
+import com.lautaro.NbaApp.Models.Team;
+
 public class PlayerDto {
     private String first_name;
     private String last_name;
@@ -12,14 +14,14 @@ public class PlayerDto {
     private int draft_year;
     private int draft_round;
     private int draft_number;
-    private Long teamId; // Id del equipo al que pertenece el jugador
+    private Team team; //equipo al que pertenece el jugador
 
     // Constructor vacío
     public PlayerDto() {}
 
     // Constructor completo
 
-    public PlayerDto(String first_name, String last_name, int jersey_number, String position, String height, String weight, String country, String college, int draft_year, int draft_round, int draft_number, Long teamId) {
+    public PlayerDto(String first_name, String last_name, int jersey_number, String position, String height, String weight, String country, String college, int draft_year, int draft_round, int draft_number, Team team) {
         this.first_name = first_name;
         this.last_name = last_name;
         this.jersey_number = jersey_number;
@@ -31,7 +33,7 @@ public class PlayerDto {
         this.draft_year = draft_year;
         this.draft_round = draft_round;
         this.draft_number = draft_number;
-        this.teamId = teamId;
+        this.team = team;
     }
 
     public String getFirst_name() {
@@ -122,12 +124,12 @@ public class PlayerDto {
         this.draft_number = draft_number;
     }
 
-    public Long getTeamId() {
-        return teamId;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setTeamId(Long teamId) {
-        this.teamId = teamId;
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
     @Override
@@ -144,7 +146,7 @@ public class PlayerDto {
                 ", draft_year=" + draft_year +
                 ", draft_round=" + draft_round +
                 ", draft_number=" + draft_number +
-                ", teamId=" + teamId +
+                ", team=" + team.getName() +
                 '}';
     }
 }
