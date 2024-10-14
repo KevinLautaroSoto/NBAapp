@@ -11,8 +11,11 @@ import com.lautaro.NbaApp.Repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -65,7 +68,9 @@ public class ExternalApiService {
 
     //Método para obtener los jugadores de la API
     private Mono<PlayerDto[]> fetchPlayers(int cursor, List<PlayerDto> allPlayers) {
-        return webClient.get()
+        return Flux.interval(Duration.ofSeconds(2))
+                .take(1) //take one event to make the request.
+                .flatMap(ignored -> webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/players")
                         .queryParam("cursor", cursor) //Add page param
@@ -110,6 +115,8 @@ public class ExternalApiService {
                     } else {
                         return Mono.just(allPlayers.toArray(new PlayerDto[0]));//Convierte la lista acumulada a un array y lo retorna.
                     }
-                });
+                }))
+                .next()
+                .retryWhen(Retry.backoff(3, Duration.ofSeconds(5)));
     }
 }
