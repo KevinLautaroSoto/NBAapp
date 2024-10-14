@@ -18,15 +18,19 @@ import java.util.Optional;
 public class PlayerService {
 
     private final PlayerRepository playerRepository;
+    private final TeamService teamService;
 
     @Autowired
-    public PlayerService(PlayerRepository playerRepository) {this.playerRepository = playerRepository;}
+    public PlayerService(PlayerRepository playerRepository, TeamService teamService) {
+        this.playerRepository = playerRepository;
+        this.teamService = teamService;
+    }
 
     //create player
     public ResponseEntity<String> createPlayer(PlayerDto playerDto) {
         try {
             Player newPlayer = new Player();
-            PlayerMapper.mapToPlayer(newPlayer, playerDto);
+            PlayerMapper.mapToPlayer(newPlayer, playerDto, teamService);
             playerRepository.save(newPlayer);
             return ResponseEntity.status(HttpStatus.CREATED).body("Player successfully created.");
         } catch (DataAccessException e) {
@@ -58,7 +62,7 @@ public class PlayerService {
             Player playerToUpdate = playerRepository.findById(id)
                     .orElseThrow(() -> new CustomDatabaseException("Player not found with ID: " + id));
 
-            PlayerMapper.mapToPlayer(playerToUpdate, playerDto);
+            PlayerMapper.mapToPlayer(playerToUpdate, playerDto, teamService);
             return playerRepository.save(playerToUpdate);
         } catch (DataAccessException e) {
             throw new CustomDatabaseException("Error updating player with ID: " + id, e);
