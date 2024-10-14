@@ -85,7 +85,15 @@ public class ExternalApiService {
                         player.setPosition(playerDto.getPosition());
                         player.setHeight(playerDto.getHeight());
                         player.setWeight(playerDto.getWeight());
-                        player.setJersey_number(playerDto.getJersey_number());
+
+                        //player.setJersey_number(playerDto.getJersey_number());
+                        try {
+                            String jerseyNumber = playerDto.getJersey_number();
+                            player.setJersey_number(jerseyNumber);
+                        } catch (Exception e) {
+                            player.setJersey_number(null);
+                        }
+
                         player.setCountry((playerDto.getCountry()));
                         player.setCollege(playerDto.getCollege());
                         player.setDraft_year(playerDto.getDraft_year());

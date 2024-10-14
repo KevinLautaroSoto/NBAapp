@@ -9,7 +9,7 @@ public class Player {
     private Long id;
     private String first_name;
     private String last_name;
-    private int jersey_number;
+    private String jersey_number;
     private String position;
     private String height;
     private String weight;
@@ -27,6 +27,21 @@ public class Player {
 
     //Default constructor
     public Player() {}
+
+    public Player(String first_name, String last_name, String jersey_number, String position, String height, String weight, String country, String college, int draft_year, int draft_round, int draft_number, Team team) {
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.jersey_number = jersey_number;
+        this.position = position;
+        this.height = height;
+        this.weight = weight;
+        this.country = country;
+        this.college = college;
+        this.draft_year = draft_year;
+        this.draft_round = draft_round;
+        this.draft_number = draft_number;
+        this.team = team;
+    }
 
     public Long getId() {
         return id;
@@ -52,11 +67,11 @@ public class Player {
         this.last_name = last_name;
     }
 
-    public int getJersey_number() {
+    public String getJersey_number() {
         return jersey_number;
     }
 
-    public void setJersey_number(int jersey_number) {
+    public void setJersey_number(String jersey_number) {
         this.jersey_number = jersey_number;
     }
 

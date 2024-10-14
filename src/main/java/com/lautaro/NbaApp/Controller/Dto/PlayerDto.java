@@ -5,7 +5,7 @@ import com.lautaro.NbaApp.Models.Team;
 public class PlayerDto {
     private String first_name;
     private String last_name;
-    private int jersey_number;
+    private String jersey_number;
     private String position;
     private String height;
     private String weight;
@@ -21,7 +21,7 @@ public class PlayerDto {
 
     // Constructor completo
 
-    public PlayerDto(String first_name, String last_name, int jersey_number, String position, String height, String weight, String country, String college, int draft_year, int draft_round, int draft_number, Team team) {
+    public PlayerDto(String first_name, String last_name, String jersey_number, String position, String height, String weight, String country, String college, int draft_year, int draft_round, int draft_number, Team team) {
         this.first_name = first_name;
         this.last_name = last_name;
         this.jersey_number = jersey_number;
@@ -52,11 +52,11 @@ public class PlayerDto {
         this.last_name = last_name;
     }
 
-    public int getJersey_number() {
+    public String getJersey_number() {
         return jersey_number;
     }
 
-    public void setJersey_number(int jersey_number) {
+    public void setJersey_number(String jersey_number) {
         this.jersey_number = jersey_number;
     }
 
