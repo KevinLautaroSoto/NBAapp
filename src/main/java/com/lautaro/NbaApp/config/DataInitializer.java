@@ -24,7 +24,7 @@ public class DataInitializer {
         });
 
         // Obtener y mostrar los jugadores.
-        externalApiService.getPlayers().subscribe(response -> {
+        externalApiService.getAllPlayers().subscribe(response -> {
             System.out.println("Respuesta de los jugadores: " + response);
         });
     }

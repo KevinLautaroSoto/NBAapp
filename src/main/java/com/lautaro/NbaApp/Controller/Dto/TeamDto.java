@@ -66,4 +66,16 @@ public class TeamDto {
     public void setFull_name(String full_name) {
         this.full_name = full_name;
     }
+
+    @Override
+    public String toString() {
+        return "TeamDto{" +
+                "name='" + name + '\'' +
+                ", city='" + city + '\'' +
+                ", conference='" + conference + '\'' +
+                ", division='" + division + '\'' +
+                ", abbreviation='" + abbreviation + '\'' +
+                ", full_name='" + full_name + '\'' +
+                '}';
+    }
 }

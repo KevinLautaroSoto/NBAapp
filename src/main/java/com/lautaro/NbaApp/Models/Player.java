@@ -11,8 +11,8 @@ public class Player {
     private String last_name;
     private int jersey_number;
     private String position;
-    private int height;
-    private int weight;
+    private String height;
+    private String weight;
     private String country;
     private String college;
     private int draft_year;
@@ -27,6 +27,14 @@ public class Player {
 
     //Default constructor
     public Player() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getFirst_name() {
         return first_name;
@@ -60,19 +68,19 @@ public class Player {
         this.position = position;
     }
 
-    public int getHeight() {
+    public String getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(String height) {
         this.height = height;
     }
 
-    public int getWeight() {
+    public String getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(String weight) {
         this.weight = weight;
     }
 

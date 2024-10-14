@@ -5,8 +5,8 @@ public class PlayerDto {
     private String last_name;
     private int jersey_number;
     private String position;
-    private int height;
-    private int weight;
+    private String height;
+    private String weight;
     private String country;
     private String college;
     private int draft_year;
@@ -19,7 +19,7 @@ public class PlayerDto {
 
     // Constructor completo
 
-    public PlayerDto(String first_name, String last_name, int jersey_number, String position, int height, int weight, String country, String college, int draft_year, int draft_round, int draft_number, Long teamId) {
+    public PlayerDto(String first_name, String last_name, int jersey_number, String position, String height, String weight, String country, String college, int draft_year, int draft_round, int draft_number, Long teamId) {
         this.first_name = first_name;
         this.last_name = last_name;
         this.jersey_number = jersey_number;
@@ -66,19 +66,19 @@ public class PlayerDto {
         this.position = position;
     }
 
-    public int getHeight() {
+    public String getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(String height) {
         this.height = height;
     }
 
-    public int getWeight() {
+    public String getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(String weight) {
         this.weight = weight;
     }
 
@@ -128,5 +128,23 @@ public class PlayerDto {
 
     public void setTeamId(Long teamId) {
         this.teamId = teamId;
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerDto{" +
+                "first_name='" + first_name + '\'' +
+                ", last_name='" + last_name + '\'' +
+                ", jersey_number=" + jersey_number +
+                ", position='" + position + '\'' +
+                ", height=" + height +
+                ", weight=" + weight +
+                ", country='" + country + '\'' +
+                ", college='" + college + '\'' +
+                ", draft_year=" + draft_year +
+                ", draft_round=" + draft_round +
+                ", draft_number=" + draft_number +
+                ", teamId=" + teamId +
+                '}';
     }
 }
