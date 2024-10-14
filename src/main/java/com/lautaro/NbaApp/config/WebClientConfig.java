@@ -10,8 +10,8 @@ public class WebClientConfig {
     @Bean
     public WebClient webClient (WebClient.Builder builder) {
         return builder
-                .baseUrl("https://nba-stats4.p.rapidapi.com") // URL base para la API
-                .defaultHeader("Authorization", "13b0929f-bc00-42f8-ad34-946ebbcd38cb") // Llave API
+                .baseUrl("https://api.balldontlie.io/v1") // URL base para la API
+                .defaultHeader("Authorization", "13b0929f-bc00-42f8-ad34-946ebbcd38cb") // Llave API con el formato "Bearer"
                 .build();
     }
 }

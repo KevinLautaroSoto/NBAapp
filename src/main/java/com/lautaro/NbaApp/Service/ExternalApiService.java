@@ -25,8 +25,6 @@ public class ExternalApiService {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/teams")
-                        .queryParam("per_page", 50)
-                        .queryParam("page", 1)
                         .build())
                 .retrieve()
                 .bodyToMono(String.class);
@@ -37,8 +35,6 @@ public class ExternalApiService {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/players")
-                        .queryParam("page", 1)
-                        .queryParam("per_page", 50)
                         .build())
                 .retrieve()
                 .bodyToMono(String.class);
