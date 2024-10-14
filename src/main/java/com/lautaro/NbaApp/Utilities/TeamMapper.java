@@ -13,12 +13,9 @@ public class TeamMapper {
         teamMapped.setName(teamDto.getName());
         teamMapped.setCity(teamDto.getCity());
         teamMapped.setConference(teamDto.getConference());
-        teamMapped.setPrimaryColor(teamDto.getPrimaryColor());
-        teamMapped.setSecondaryColor(teamDto.getSecondaryColor());
-        teamMapped.setTerciaryColor(teamDto.getTerciaryColor());
-        teamMapped.setLogoUrl(teamDto.getLogoUrl());
-        teamMapped.setStadiumName(teamDto.getStadiumName());
-        teamMapped.setHeadcoach(teamDto.getHeadcoach());
+        teamMapped.setDivision(teamDto.getDivision());
+        teamMapped.setAbbreviation(teamDto.getAbbreviation());
+        teamMapped.setFull_name(teamDto.getFull_name());
 
         return teamMapped;
     }
