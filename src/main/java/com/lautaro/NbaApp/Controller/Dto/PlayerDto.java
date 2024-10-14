@@ -1,53 +1,61 @@
 package com.lautaro.NbaApp.Controller.Dto;
 
 public class PlayerDto {
-    private String name;
-    private String lastName;
-    private int jersey;
+    private String first_name;
+    private String last_name;
+    private int jersey_number;
     private String position;
     private int height;
     private int weight;
     private String country;
+    private String college;
+    private int draft_year;
+    private int draft_round;
+    private int draft_number;
     private Long teamId; // Id del equipo al que pertenece el jugador
 
     // Constructor vacío
     public PlayerDto() {}
 
     // Constructor completo
-    public PlayerDto(String name, String lastName, int jersey, String position, int height, int weight, String country, Long teamId) {
-        this.name = name;
-        this.lastName = lastName;
-        this.jersey = jersey;
+
+    public PlayerDto(String first_name, String last_name, int jersey_number, String position, int height, int weight, String country, String college, int draft_year, int draft_round, int draft_number, Long teamId) {
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.jersey_number = jersey_number;
         this.position = position;
         this.height = height;
         this.weight = weight;
         this.country = country;
+        this.college = college;
+        this.draft_year = draft_year;
+        this.draft_round = draft_round;
+        this.draft_number = draft_number;
         this.teamId = teamId;
     }
 
-    // Getters y setters
-    public String getName() {
-        return name;
+    public String getFirst_name() {
+        return first_name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLast_name() {
+        return last_name;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
     }
 
-    public int getJersey() {
-        return jersey;
+    public int getJersey_number() {
+        return jersey_number;
     }
 
-    public void setJersey(int jersey) {
-        this.jersey = jersey;
+    public void setJersey_number(int jersey_number) {
+        this.jersey_number = jersey_number;
     }
 
     public String getPosition() {
@@ -80,6 +88,38 @@ public class PlayerDto {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getCollege() {
+        return college;
+    }
+
+    public void setCollege(String college) {
+        this.college = college;
+    }
+
+    public int getDraft_year() {
+        return draft_year;
+    }
+
+    public void setDraft_year(int draft_year) {
+        this.draft_year = draft_year;
+    }
+
+    public int getDraft_round() {
+        return draft_round;
+    }
+
+    public void setDraft_round(int draft_round) {
+        this.draft_round = draft_round;
+    }
+
+    public int getDraft_number() {
+        return draft_number;
+    }
+
+    public void setDraft_number(int draft_number) {
+        this.draft_number = draft_number;
     }
 
     public Long getTeamId() {

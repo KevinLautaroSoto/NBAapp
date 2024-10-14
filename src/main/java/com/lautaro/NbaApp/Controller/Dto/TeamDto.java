@@ -4,26 +4,19 @@ public class TeamDto {
     private String name;
     private String city;
     private String conference;
-    private String primaryColor;
-    private String secondaryColor;
-    private String terciaryColor;
-    private String logoUrl;
-    private String stadiumName;
-    private String headcoach;
+    private String division;
+    private String abbreviation;
+    private String full_name;
 
     public TeamDto() {}
 
-    public TeamDto(String name, String city, String conference, String primaryColor, String secondaryColor,
-                   String terciaryColor, String logoUrl, String stadiumName, String headcoach) {
+    public TeamDto(String name, String city, String conference, String division, String abbreviation, String full_name) {
         this.name = name;
         this.city = city;
         this.conference = conference;
-        this.primaryColor = primaryColor;
-        this.secondaryColor = secondaryColor;
-        this.terciaryColor = terciaryColor;
-        this.logoUrl = logoUrl;
-        this.stadiumName = stadiumName;
-        this.headcoach = headcoach;
+        this.division = division;
+        this.abbreviation = abbreviation;
+        this.full_name = full_name;
     }
 
     public String getName() {
@@ -50,51 +43,27 @@ public class TeamDto {
         this.conference = conference;
     }
 
-    public String getPrimaryColor() {
-        return primaryColor;
+    public String getDivision() {
+        return division;
     }
 
-    public void setPrimaryColor(String primaryColor) {
-        this.primaryColor = primaryColor;
+    public void setDivision(String division) {
+        this.division = division;
     }
 
-    public String getSecondaryColor() {
-        return secondaryColor;
+    public String getAbbreviation() {
+        return abbreviation;
     }
 
-    public void setSecondaryColor(String secondaryColor) {
-        this.secondaryColor = secondaryColor;
+    public void setAbbreviation(String abbreviation) {
+        this.abbreviation = abbreviation;
     }
 
-    public String getTerciaryColor() {
-        return terciaryColor;
+    public String getFull_name() {
+        return full_name;
     }
 
-    public void setTerciaryColor(String terciaryColor) {
-        this.terciaryColor = terciaryColor;
-    }
-
-    public String getLogoUrl() {
-        return logoUrl;
-    }
-
-    public void setLogoUrl(String logoUrl) {
-        this.logoUrl = logoUrl;
-    }
-
-    public String getStadiumName() {
-        return stadiumName;
-    }
-
-    public void setStadiumName(String stadiumName) {
-        this.stadiumName = stadiumName;
-    }
-
-    public String getHeadcoach() {
-        return headcoach;
-    }
-
-    public void setHeadcoach(String headcoach) {
-        this.headcoach = headcoach;
+    public void setFull_name(String full_name) {
+        this.full_name = full_name;
     }
 }
