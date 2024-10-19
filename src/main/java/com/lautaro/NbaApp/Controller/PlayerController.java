@@ -62,6 +62,19 @@ public class PlayerController {
     }
 
     /**
+     * Handles the HTTP PATCH request to update the fields of an existing player.
+     * The player with the specified ID will be updated with the provided values from PlayerDto.
+     * Only the non-null or non-zero fields from PlayerDto will be used to update the player.
+     *
+     * @param id        The ID of the player to be updated.
+     * @param playerDto The data transfer object containing the new values for the player fields.
+     * @return The updated Player entity after the patching process.
+     */
+    public Player patchPlayer(@PathVariable Long id, @RequestBody PlayerDto playerDto) {
+        return playerService.patchPlayer(id, playerDto);
+    }
+
+    /**
      * Deletes a player from the database based on its unique identifier.
      *
      * @param id The unique identifier (Long) of the player to be deleted.
