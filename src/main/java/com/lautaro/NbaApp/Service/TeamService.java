@@ -21,8 +21,14 @@ public class TeamService {
     @Autowired
     private TeamService(TeamRepository teamRepository) {this.teamRepository = teamRepository;}
 
-    //create team
-    public ResponseEntity<String> createProduct(TeamDto teamDto) {
+    /**
+     * Creates a new team adn persists it to the databsae.
+     * @param teamDto The teamDto object containing information about the team to be created.
+     * @return A ResponseEntity object with appropriate HTTP status code and message.
+     *        - On success: 200 Ok with message "Team Successfully creates."
+     *        - On failure: 500 Internal Server Error with detailed error message.
+     */
+    public ResponseEntity<String> createTeam(TeamDto teamDto) {
         try {
             Team newTeam = new Team();
             TeamMapper.mapToTeam(newTeam, teamDto);
@@ -33,7 +39,12 @@ public class TeamService {
         }
     }
 
-    //get all teams
+    /**
+     * Retrieves all teams stored in the database.
+     *
+     * @return A list containing all Team objects representing existing teams.
+     * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
+     */
     public List<Team> getAllTeam() {
         try {
             return teamRepository.findAll();
@@ -42,7 +53,13 @@ public class TeamService {
         }
     }
 
-    //get team by id
+    /**
+     * Retrieves a specific team based on its unique identifier.
+     *
+     * @param id The unique identifier (Long) of the team to be retrieved.
+     * @return An Optional object containing the requested Team object if found, or empty if not found.
+     * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
+     */
     public Optional<Team> getTeamById(Long id) {
         try {
             return teamRepository.findById(id);
@@ -51,7 +68,14 @@ public class TeamService {
         }
     }
 
-    //update team
+    /**
+     * Updates an existing team based on its identifier and provided TeamDto object.
+     *
+     * @param id       The unique identifier (Long) of the team to be updated.
+     * @param teamDto  The TeamDto object containing updated information for the team.
+     * @return The updated Team object after the update operation.
+     * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
+     */
     public Team updateTeam (Long id, TeamDto teamDto) {
         try {
             Team teamUpdated = teamRepository.findById(id)
@@ -65,7 +89,14 @@ public class TeamService {
         }
     }
 
-    //delete team
+    /**
+     * Deletes a team from the database based on its unique identifier.
+     *
+     * @param id The unique identifier (Long) of the team to be deleted.
+     * @return A ResponseEntity object with appropriate HTTP status code and message.
+     *         - On success: 200 OK with a success message indicating the deleted team's ID.
+     *         - On failure: Appropriate error code (e.g., 404 Not Found) with an error message.
+     */
     public ResponseEntity<String> deleteTeam(Long id) {
         try {
             Team teamToDelete = teamRepository.findById(id)

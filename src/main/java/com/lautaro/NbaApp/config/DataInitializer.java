@@ -22,6 +22,9 @@ public class DataInitializer {
         this.teamRepository = teamRepository;
     }
 
+    /**
+     * Initializes the application by fetching and saving data from the external API if necessary.
+     */
     public void initialize() {
         if (teamRepository.count() == 0) {
             externalApiService.getTeams().subscribe(response -> {

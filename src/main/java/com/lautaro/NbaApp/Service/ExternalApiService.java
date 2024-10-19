@@ -35,7 +35,11 @@ public class ExternalApiService {
         this.playerRepository = playerRepository;
     }
 
-    //Método para obtener los equipos de la API
+    /**
+     * Fetches teams from the external API and saves them to the database.
+     *
+     * @return A Mono containing an array of TeamDto objects representing retrieved teams.
+     */
     public Mono<TeamDto[]> getTeams() {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
@@ -62,11 +66,24 @@ public class ExternalApiService {
                 });
     }
 
+    /**
+     * Initiates the process of fetching all players in a paginated manner
+     * from the external API and saves them to the database.
+     *
+     * @return A Mono containing an array of PlayerDto objects representing all players.
+     */
     public Mono<PlayerDto[]> getAllPlayers() {
         return fetchPlayers(cursor, new ArrayList<>()); //Inicia la paginacion en 1 y una lista vacia.
     }
 
-    //Método para obtener los jugadores de la API
+    /**
+     * Fetches a page of players from the external API, saves them to the database,
+     * and recursively calls itself if there are more pages to retrieve.
+     *
+     * @param cursor   The current page cursor for pagination.
+     * @param allPlayers A list to accumulate all retrieved players.
+     * @return A Mono containing an array of PlayerDto objects representing a page of players.
+     */
     private Mono<PlayerDto[]> fetchPlayers(int cursor, List<PlayerDto> allPlayers) {
         return Flux.interval(Duration.ofSeconds(2))
                 .take(1) //take one event to make the request.
