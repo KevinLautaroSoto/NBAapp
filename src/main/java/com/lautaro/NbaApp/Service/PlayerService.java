@@ -111,29 +111,40 @@ public class PlayerService {
                     .orElseThrow(() -> new CustomNotFoundException("Player with ID " + id + " not found."));
             if (playerDto.getFirst_name() != null) {
                 searchedPlayer.setFirst_name(playerDto.getFirst_name());
-            } else if (playerDto.getLast_name() != null) {
+            }
+            if (playerDto.getLast_name() != null) {
                 searchedPlayer.setLast_name(playerDto.getLast_name());
-            } else if (playerDto.getJersey_number() != null) {
+            }
+
+            if (playerDto.getJersey_number() != null) {
                 searchedPlayer.setJersey_number(playerDto.getJersey_number());
-            } else if (playerDto.getPosition() != null) {
+            }
+            if (playerDto.getPosition() != null) {
                 searchedPlayer.setPosition(playerDto.getPosition());
-            } else if (playerDto.getHeight() != null) {
+            }
+            if (playerDto.getHeight() != null) {
                 searchedPlayer.setHeight(playerDto.getHeight());
-            } else if (playerDto.getWeight() != null) {
+            }
+            if (playerDto.getWeight() != null) {
                 searchedPlayer.setWeight(playerDto.getWeight());
-            } else if (playerDto.getCountry() != null) {
+            }
+            if (playerDto.getCountry() != null) {
                 searchedPlayer.setCountry(playerDto.getCountry());
-            } else if (playerDto.getCollege() != null) {
+            }
+            if (playerDto.getCollege() != null) {
                 searchedPlayer.setCollege(playerDto.getCollege());
-            } else if (playerDto.getDraft_year() != 0) {
+            }
+            if (playerDto.getDraft_year() != 0) {
                 searchedPlayer.setDraft_year(playerDto.getDraft_year());
-            } else if (playerDto.getDraft_round() != 0) {
+            }
+            if (playerDto.getDraft_round() != 0) {
                 searchedPlayer.setDraft_round(playerDto.getDraft_round());
-            } else if (playerDto.getDraft_number() != 0) {
+            }
+            if (playerDto.getDraft_number() != 0) {
                 searchedPlayer.setDraft_number(playerDto.getDraft_number());
             }
 
-            return searchedPlayer;
+            return playerRepository.save(searchedPlayer);
         } catch (DataAccessException e) {
             throw new CustomDatabaseException("Error patching player with ID " + id, e );
         }

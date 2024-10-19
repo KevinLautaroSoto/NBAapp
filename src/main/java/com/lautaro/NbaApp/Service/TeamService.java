@@ -105,15 +105,20 @@ public class TeamService {
                     .orElseThrow(() -> new CustomNotFoundException("Team with ID " + id + " not found."));
             if (teamDto.getName() != null) {
                 searchedTeam.setName(teamDto.getName());
-            } else if (teamDto.getCity() != null) {
+            }
+            if (teamDto.getCity() != null) {
                 searchedTeam.setCity(teamDto.getCity());
-            } else if (teamDto.getAbbreviation() != null) {
+            }
+            if (teamDto.getAbbreviation() != null) {
                 searchedTeam.setAbbreviation(teamDto.getAbbreviation());
-            }else if (teamDto.getDivision() != null) {
+            }
+            if (teamDto.getDivision() != null) {
                 searchedTeam.setDivision(teamDto.getDivision());
-            }else if (teamDto.getConference() != null) {
+            }
+            if (teamDto.getConference() != null) {
                 searchedTeam.setConference(teamDto.getConference());
-            }else if (teamDto.getFull_name() != null) {
+            }
+            if (teamDto.getFull_name() != null) {
                 searchedTeam.setFull_name(teamDto.getFull_name());
             }
 
