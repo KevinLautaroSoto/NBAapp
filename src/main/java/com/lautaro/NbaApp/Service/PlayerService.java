@@ -52,11 +52,11 @@ public class PlayerService {
      * @return A list containing all Player objects representing existing players.
      * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
      */
-    public List<Player> getAllPlayers() {
+    public ResponseEntity<List<Player>> getAllPlayers() {
         try {
-            return playerRepository.findAll();
+            return ResponseEntity.ok(playerRepository.findAll());
         } catch (DataAccessException e) {
-            throw new CustomDatabaseException("Error retrieving player from the database. ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -67,11 +67,11 @@ public class PlayerService {
      * @return An Optional object containing the requested Player object if found, or empty if not found.
      * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
      */
-    public Optional<Player> getPlayerById (Long id) {
+    public ResponseEntity<Player> getPlayerById (Long id) {
         try {
-            return playerRepository.findById(id);
+            return ResponseEntity.ok(playerRepository.findById(id).orElseThrow(() -> new CustomNotFoundException("Player with that id couldn´t be found.")));
         } catch (DataAccessException e) {
-            throw new CustomDatabaseException("Error retrieving player with ID: " + id + "form the database.", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -83,15 +83,15 @@ public class PlayerService {
      * @return The updated Player object after the update operation.
      * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
      */
-    public Player updatePlayer(Long id, PlayerDto playerDto) {
+    public ResponseEntity<Player> updatePlayer(Long id, PlayerDto playerDto) {
         try {
             Player playerToUpdate = playerRepository.findById(id)
                     .orElseThrow(() -> new CustomDatabaseException("Player not found with ID: " + id));
 
             PlayerMapper.mapToPlayer(playerToUpdate, playerDto, teamService);
-            return playerRepository.save(playerToUpdate);
+            return ResponseEntity.ok(playerRepository.save(playerToUpdate));
         } catch (DataAccessException e) {
-            throw new CustomDatabaseException("Error updating player with ID: " + id, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -105,7 +105,7 @@ public class PlayerService {
      * @throws CustomNotFoundException    If the player with the specified ID is not found.
      * @throws CustomDatabaseException    If there is a database error while updating the player.
      */
-    public Player patchPlayer(Long id, PlayerDto playerDto) {
+    public ResponseEntity<Player> patchPlayer(Long id, PlayerDto playerDto) {
         try {
             Player searchedPlayer = playerRepository.findById(id)
                     .orElseThrow(() -> new CustomNotFoundException("Player with ID " + id + " not found."));
@@ -144,9 +144,9 @@ public class PlayerService {
                 searchedPlayer.setDraft_number(playerDto.getDraft_number());
             }
 
-            return playerRepository.save(searchedPlayer);
+            return ResponseEntity.ok(playerRepository.save(searchedPlayer));
         } catch (DataAccessException e) {
-            throw new CustomDatabaseException("Error patching player with ID " + id, e );
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
