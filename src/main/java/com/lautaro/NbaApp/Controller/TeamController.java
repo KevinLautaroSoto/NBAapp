@@ -3,8 +3,15 @@ package com.lautaro.NbaApp.Controller;
 import com.lautaro.NbaApp.Controller.Dto.TeamDto;
 import com.lautaro.NbaApp.Models.Team;
 import com.lautaro.NbaApp.Service.TeamService;
+import com.lautaro.NbaApp.exceptions.CustomDatabaseException;
+import com.lautaro.NbaApp.exceptions.CustomNotFoundException;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,8 +30,8 @@ public class TeamController {
      * @throws Exception throws an exception if an error occurs during team creation.
      */
     @PostMapping
-    public void createTeam (@RequestBody TeamDto teamDto) {
-        teamService.createTeam(teamDto);
+    public ResponseEntity<String> createTeam (@RequestBody TeamDto teamDto) {
+        return teamService.createTeam(teamDto);
     }
 
     /**
@@ -33,7 +40,7 @@ public class TeamController {
      * @return A list containing all Team objects representing existing teams.
      */
     @GetMapping
-    public List<Team> getAllTeam () {
+    public ResponseEntity<List<Team>> getAllTeam () {
         return teamService.getAllTeam();
     }
 
@@ -44,7 +51,7 @@ public class TeamController {
      * @return An Optional object containing the requested Team object if found, or empty if not found.
      */
     @GetMapping("/{id}")
-    public Optional<Team> getTeamById (@PathVariable Long id) {
+    public ResponseEntity<Team> getTeamById (@PathVariable Long id) {
         return teamService.getTeamById(id);
     }
 
@@ -57,7 +64,7 @@ public class TeamController {
      * @throws Exception Throws an exception if an error occurs during team update.
      */
     @PutMapping("/update/{id}")
-    public Team updateTeam (@PathVariable Long id, @RequestBody TeamDto teamDto) {
+    public ResponseEntity<Team> updateTeam (@PathVariable Long id, @RequestBody TeamDto teamDto) {
         return teamService.updateTeam(id, teamDto);
     }
 
@@ -72,7 +79,7 @@ public class TeamController {
      *         - On failure (e.g., team not found, validation errors): Appropriate error code (e.g., 404 Not Found, 400 Bad Request) with an error message.
      */
     @PatchMapping("/patch/{id}")
-    public Team patchTeam (@PathVariable Long id ,@RequestBody TeamDto teamDto) {
+    public ResponseEntity<Team> patchTeam (@PathVariable Long id ,@RequestBody TeamDto teamDto) {
         return teamService.patchTeam(id, teamDto);
     }
 

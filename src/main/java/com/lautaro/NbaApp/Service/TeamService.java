@@ -8,6 +8,8 @@ import com.lautaro.NbaApp.exceptions.CustomDatabaseException;
 import com.lautaro.NbaApp.exceptions.CustomNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +36,7 @@ public class TeamService {
             Team newTeam = new Team();
             TeamMapper.mapToTeam(newTeam, teamDto);
             teamRepository.save(newTeam);
-            return ResponseEntity.ok("Team successfully created.");
+            return ResponseEntity.status(HttpStatus.CREATED).body("Team successfully created.");
         } catch (DataAccessException e) {
             return ResponseEntity.status(500).body("Error creating team: " + e.getMessage());
         }
@@ -46,11 +48,11 @@ public class TeamService {
      * @return A list containing all Team objects representing existing teams.
      * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
      */
-    public List<Team> getAllTeam() {
+    public ResponseEntity<List<Team>> getAllTeam() {
         try {
-            return teamRepository.findAll();
+            return ResponseEntity.ok(teamRepository.findAll());
         } catch (DataAccessException e) {
-            throw new CustomDatabaseException("Error retrieving teams from the database. ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -61,11 +63,13 @@ public class TeamService {
      * @return An Optional object containing the requested Team object if found, or empty if not found.
      * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
      */
-    public Optional<Team> getTeamById(Long id) {
+    public ResponseEntity<Team> getTeamById(Long id) {
         try {
-            return teamRepository.findById(id);
+            return ResponseEntity.ok(teamRepository.findById(id)
+                    .orElseThrow(() -> new CustomNotFoundException("Team with ID " + id + " not found."))
+            );
         } catch (DataAccessException e) {
-            throw new CustomDatabaseException("Error retrieving team with ID " + id + "from the database.", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -77,16 +81,16 @@ public class TeamService {
      * @return The updated Team object after the update operation.
      * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
      */
-    public Team updateTeam (Long id, TeamDto teamDto) {
+    public ResponseEntity<Team> updateTeam (Long id, TeamDto teamDto) {
         try {
             Team teamUpdated = teamRepository.findById(id)
                     .orElseThrow(() -> new CustomDatabaseException("Team not found with ID: " + id));
 
             TeamMapper.mapToTeam(teamUpdated, teamDto);
 
-            return teamRepository.save(teamUpdated);
+            return ResponseEntity.ok(teamRepository.save(teamUpdated));
         } catch (DataAccessException e) {
-            throw new CustomDatabaseException("Error updating team with ID: " + id, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -99,7 +103,7 @@ public class TeamService {
      * @throws       CustomNotFoundException     if a team with the provided ID is not found.
      * @throws       CustomDatabaseException   if a database error occurs during the update operation.
      */
-    public Team patchTeam (Long id, TeamDto teamDto) {
+    public ResponseEntity<Team> patchTeam (Long id, TeamDto teamDto) {
         try {
             Team searchedTeam = teamRepository.findById(id)
                     .orElseThrow(() -> new CustomNotFoundException("Team with ID " + id + " not found."));
@@ -122,9 +126,9 @@ public class TeamService {
                 searchedTeam.setFull_name(teamDto.getFull_name());
             }
 
-            return teamRepository.save(searchedTeam);
+            return ResponseEntity.ok(teamRepository.save(searchedTeam));
         } catch (DataAccessException e) {
-            throw new CustomDatabaseException("Error patching team with ID: " + id, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
