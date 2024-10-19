@@ -26,7 +26,14 @@ public class PlayerService {
         this.teamService = teamService;
     }
 
-    //create player
+    /**
+     * Creates a new player based on the provided PlayerDto object.
+     *
+     * @param playerDto The PlayerDto object containing information about the player to be created.
+     * @return A ResponseEntity object with appropriate HTTP status code and message.
+     *         - On success: 201 Created with message "Player successfully created."
+     *         - On failure: 500 Internal Server Error with detailed error message.
+     */
     public ResponseEntity<String> createPlayer(PlayerDto playerDto) {
         try {
             Player newPlayer = new Player();
@@ -38,7 +45,12 @@ public class PlayerService {
         }
     }
 
-    //get all players
+    /**
+     * Retrieves all players stored in the database.
+     *
+     * @return A list containing all Player objects representing existing players.
+     * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
+     */
     public List<Player> getAllPlayers() {
         try {
             return playerRepository.findAll();
@@ -47,7 +59,13 @@ public class PlayerService {
         }
     }
 
-    //get player by id
+    /**
+     * Retrieves a specific player based on its unique identifier.
+     *
+     * @param id The unique identifier (Long) of the player to be retrieved.
+     * @return An Optional object containing the requested Player object if found, or empty if not found.
+     * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
+     */
     public Optional<Player> getPlayerById (Long id) {
         try {
             return playerRepository.findById(id);
@@ -56,7 +74,14 @@ public class PlayerService {
         }
     }
 
-    //update player
+    /**
+     * Updates an existing player based on its identifier and provided PlayerDto object.
+     *
+     * @param id       The unique identifier (Long) of the player to be updated.
+     * @param playerDto  The PlayerDto object containing updated information for the player.
+     * @return The updated Player object after the update operation.
+     * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
+     */
     public Player updatePlayer(Long id, PlayerDto playerDto) {
         try {
             Player playerToUpdate = playerRepository.findById(id)
@@ -69,7 +94,14 @@ public class PlayerService {
         }
     }
 
-    //delete player
+    /**
+     * Deletes a player from the database based on its unique identifier.
+     *
+     * @param id The unique identifier (Long) of the player to be deleted.
+     * @return A ResponseEntity object with appropriate HTTP status code and message.
+     *         - On success: 200 OK with a success message indicating the deleted player's ID.
+     *         - On failure: Appropriate error code (e.g., 404 Not Found) with an error message.
+     */
     public ResponseEntity<String> deletePlayer(Long id) {
         try {
             Player playerToDelete = playerRepository.findById(id)
