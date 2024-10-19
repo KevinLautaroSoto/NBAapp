@@ -56,9 +56,24 @@ public class TeamController {
      * @return The updated Team object after the update operation.
      * @throws Exception Throws an exception if an error occurs during team update.
      */
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public Team updateTeam (@PathVariable Long id, @RequestBody TeamDto teamDto) {
         return teamService.updateTeam(id, teamDto);
+    }
+
+    /**
+     * Partially  
+     updates an existing team based on its unique identifier.
+     *
+     * @param id       The unique identifier (Long) of the team to be updated.
+     * @param teamDto The updated team data (TeamDto). Only the fields that need to be modified should be included.
+     * @return A ResponseEntity object with the updated team (Team) or an appropriate error response.
+     *         - On success: 200 OK with the updated team.
+     *         - On failure (e.g., team not found, validation errors): Appropriate error code (e.g., 404 Not Found, 400 Bad Request) with an error message.
+     */
+    @PatchMapping("/patch/{id}")
+    public Team patchTeam (@PathVariable Long id ,@RequestBody TeamDto teamDto) {
+        return teamService.patchTeam(id, teamDto);
     }
 
     /**

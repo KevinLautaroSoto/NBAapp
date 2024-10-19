@@ -5,6 +5,7 @@ import com.lautaro.NbaApp.Models.Team;
 import com.lautaro.NbaApp.Repository.TeamRepository;
 import com.lautaro.NbaApp.Utilities.TeamMapper;
 import com.lautaro.NbaApp.exceptions.CustomDatabaseException;
+import com.lautaro.NbaApp.exceptions.CustomNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -86,6 +87,44 @@ public class TeamService {
             return teamRepository.save(teamUpdated);
         } catch (DataAccessException e) {
             throw new CustomDatabaseException("Error updating team with ID: " + id, e);
+        }
+    }
+
+    /**
+     * Partially updates an existing team entity based on its unique identifier.
+     *
+     * @param id       The unique identifier (Long) of the team to be updated.
+     * @param teamDto  The updated team data (TeamDto). Only fields with non-null values will be applied to the existing team.
+     * @return        The updated team entity (Team) on success, or throws an exception on failure.
+     * @throws       CustomNotFoundException     if a team with the provided ID is not found.
+     * @throws       CustomDatabaseException   if a database error occurs during the update operation.
+     */
+    public Team patchTeam (Long id, TeamDto teamDto) {
+        try {
+            Team searchedTeam = teamRepository.findById(id)
+                    .orElseThrow(() -> new CustomNotFoundException("Team with ID " + id + " not found."));
+            if (teamDto.getName() != null) {
+                searchedTeam.setName(teamDto.getName());
+            }
+            if (teamDto.getCity() != null) {
+                searchedTeam.setCity(teamDto.getCity());
+            }
+            if (teamDto.getAbbreviation() != null) {
+                searchedTeam.setAbbreviation(teamDto.getAbbreviation());
+            }
+            if (teamDto.getDivision() != null) {
+                searchedTeam.setDivision(teamDto.getDivision());
+            }
+            if (teamDto.getConference() != null) {
+                searchedTeam.setConference(teamDto.getConference());
+            }
+            if (teamDto.getFull_name() != null) {
+                searchedTeam.setFull_name(teamDto.getFull_name());
+            }
+
+            return teamRepository.save(searchedTeam);
+        } catch (DataAccessException e) {
+            throw new CustomDatabaseException("Error patching team with ID: " + id, e);
         }
     }
 

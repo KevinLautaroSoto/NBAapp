@@ -5,6 +5,7 @@ import com.lautaro.NbaApp.Models.Player;
 import com.lautaro.NbaApp.Repository.PlayerRepository;
 import com.lautaro.NbaApp.Utilities.PlayerMapper;
 import com.lautaro.NbaApp.exceptions.CustomDatabaseException;
+import com.lautaro.NbaApp.exceptions.CustomNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -91,6 +92,61 @@ public class PlayerService {
             return playerRepository.save(playerToUpdate);
         } catch (DataAccessException e) {
             throw new CustomDatabaseException("Error updating player with ID: " + id, e);
+        }
+    }
+
+    /**
+     * Updates the fields of an existing player with the provided values from the PlayerDto.
+     * Only non-null or non-zero values from the PlayerDto will be used to update the player.
+     *
+     * @param id        The ID of the player to be updated.
+     * @param playerDto The data transfer object containing the new values for the player fields.
+     * @return The updated Player entity after the patching process.
+     * @throws CustomNotFoundException    If the player with the specified ID is not found.
+     * @throws CustomDatabaseException    If there is a database error while updating the player.
+     */
+    public Player patchPlayer(Long id, PlayerDto playerDto) {
+        try {
+            Player searchedPlayer = playerRepository.findById(id)
+                    .orElseThrow(() -> new CustomNotFoundException("Player with ID " + id + " not found."));
+            if (playerDto.getFirst_name() != null) {
+                searchedPlayer.setFirst_name(playerDto.getFirst_name());
+            }
+            if (playerDto.getLast_name() != null) {
+                searchedPlayer.setLast_name(playerDto.getLast_name());
+            }
+
+            if (playerDto.getJersey_number() != null) {
+                searchedPlayer.setJersey_number(playerDto.getJersey_number());
+            }
+            if (playerDto.getPosition() != null) {
+                searchedPlayer.setPosition(playerDto.getPosition());
+            }
+            if (playerDto.getHeight() != null) {
+                searchedPlayer.setHeight(playerDto.getHeight());
+            }
+            if (playerDto.getWeight() != null) {
+                searchedPlayer.setWeight(playerDto.getWeight());
+            }
+            if (playerDto.getCountry() != null) {
+                searchedPlayer.setCountry(playerDto.getCountry());
+            }
+            if (playerDto.getCollege() != null) {
+                searchedPlayer.setCollege(playerDto.getCollege());
+            }
+            if (playerDto.getDraft_year() != 0) {
+                searchedPlayer.setDraft_year(playerDto.getDraft_year());
+            }
+            if (playerDto.getDraft_round() != 0) {
+                searchedPlayer.setDraft_round(playerDto.getDraft_round());
+            }
+            if (playerDto.getDraft_number() != 0) {
+                searchedPlayer.setDraft_number(playerDto.getDraft_number());
+            }
+
+            return playerRepository.save(searchedPlayer);
+        } catch (DataAccessException e) {
+            throw new CustomDatabaseException("Error patching player with ID " + id, e );
         }
     }
 
