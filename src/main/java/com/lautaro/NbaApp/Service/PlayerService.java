@@ -56,7 +56,7 @@ public class PlayerService {
         try {
             return ResponseEntity.ok(playerRepository.findAll());
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error getting player from the database.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error getting player from the database.");
         }
     }
 
@@ -71,7 +71,7 @@ public class PlayerService {
         try {
             return ResponseEntity.ok(playerRepository.findById(id).orElseThrow(() -> new CustomNotFoundException("Player with that id couldn´t be found.")));
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in getting a player with ID: " + id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Error in getting a player with ID: " + id);
         }
     }
 
@@ -91,7 +91,7 @@ public class PlayerService {
             PlayerMapper.mapToPlayer(playerToUpdate, playerDto, teamService);
             return ResponseEntity.ok(playerRepository.save(playerToUpdate));
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating a Player with ID: " + id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Error updating a Player with ID: " + id + "- " + playerDto.getLast_name());
         }
     }
 
@@ -146,7 +146,7 @@ public class PlayerService {
 
             return ResponseEntity.ok(playerRepository.save(searchedPlayer));
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error patching a Player with ID: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error patching a Player with ID: " + id + "- " + playerDto.getLast_name() );
         }
     }
 
@@ -166,7 +166,7 @@ public class PlayerService {
             playerRepository.delete(playerToDelete);
             return ResponseEntity.ok().body("Player successfully deleted from the database.");
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting Player from the database with ID: " + id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Error deleting Player from the database with ID: " + id);
         }
     }
 }

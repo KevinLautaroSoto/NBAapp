@@ -38,7 +38,7 @@ public class TeamService {
             teamRepository.save(newTeam);
             return ResponseEntity.status(HttpStatus.CREATED).body("Team successfully created.");
         } catch (DataAccessException e) {
-            return ResponseEntity.status(500).body("Error creating team: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating team: " + e.getMessage());
         }
     }
 
@@ -52,7 +52,7 @@ public class TeamService {
         try {
             return ResponseEntity.ok(teamRepository.findAll());
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Can´t retrieve the teams from the database. " + e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can´t retrieve the teams from the database. " + e.getMessage());
         }
     }
 
@@ -69,7 +69,7 @@ public class TeamService {
                     .orElseThrow(() -> new CustomNotFoundException("Team with ID " + id + " not found."))
             );
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Couldn´t find the team with ID:" + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Couldn´t find the team with ID:" + id);
         }
     }
 
@@ -90,7 +90,7 @@ public class TeamService {
 
             return ResponseEntity.ok(teamRepository.save(teamUpdated));
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating team with ID: " + id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Error updating team with ID: " + id + "- " + teamDto.getFull_name());
         }
     }
 
@@ -128,7 +128,7 @@ public class TeamService {
 
             return ResponseEntity.ok(teamRepository.save(searchedTeam));
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error patching a Team with ID: " + id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Error patching a Team with ID: " + id + "- " + teamDto.getFull_name());
         }
     }
 
@@ -149,7 +149,7 @@ public class TeamService {
 
             return ResponseEntity.ok("Team with ID: " + id +  " successfully deleted from the database.");
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting Team with ID: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error deleting Team with ID: " + id);
         }
     }
 }
