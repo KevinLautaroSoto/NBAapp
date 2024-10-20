@@ -33,7 +33,7 @@ public class PlayerController {
      * @return A list containing all Player objects representing existing players.
      */
     @GetMapping
-    public ResponseEntity<List<Player>> getAllPlayers() {
+    public ResponseEntity<?> getAllPlayers() {
        return playerService.getAllPlayers();
     }
 
@@ -44,7 +44,7 @@ public class PlayerController {
      * @return An Optional object containing the requested Player object if found, or empty if not found.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Player> getPlayersById(@PathVariable Long id) {
+    public ResponseEntity<?> getPlayersById(@PathVariable Long id) {
         return playerService.getPlayerById(id);
     }
 
@@ -57,7 +57,7 @@ public class PlayerController {
      * @throws Exception Throws an exception if an error occurs during player update.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Player> updatePlayer(@PathVariable Long id, @RequestBody PlayerDto playerDto) {
+    public ResponseEntity<?> updatePlayer(@PathVariable Long id, @RequestBody PlayerDto playerDto) {
         return playerService.updatePlayer(id, playerDto);
     }
 
@@ -70,7 +70,7 @@ public class PlayerController {
      * @param playerDto The data transfer object containing the new values for the player fields.
      * @return The updated Player entity after the patching process.
      */
-    public ResponseEntity<Player> patchPlayer(@PathVariable Long id, @RequestBody PlayerDto playerDto) {
+    public ResponseEntity<?> patchPlayer(@PathVariable Long id, @RequestBody PlayerDto playerDto) {
         return playerService.patchPlayer(id, playerDto);
     }
 

@@ -40,7 +40,7 @@ public class TeamController {
      * @return A list containing all Team objects representing existing teams.
      */
     @GetMapping
-    public ResponseEntity<List<Team>> getAllTeam () {
+    public ResponseEntity<?> getAllTeam () {
         return teamService.getAllTeam();
     }
 
@@ -51,7 +51,7 @@ public class TeamController {
      * @return An Optional object containing the requested Team object if found, or empty if not found.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Team> getTeamById (@PathVariable Long id) {
+    public ResponseEntity<?> getTeamById (@PathVariable Long id) {
         return teamService.getTeamById(id);
     }
 
@@ -64,7 +64,7 @@ public class TeamController {
      * @throws Exception Throws an exception if an error occurs during team update.
      */
     @PutMapping("/update/{id}")
-    public ResponseEntity<Team> updateTeam (@PathVariable Long id, @RequestBody TeamDto teamDto) {
+    public ResponseEntity<?> updateTeam (@PathVariable Long id, @RequestBody TeamDto teamDto) {
         return teamService.updateTeam(id, teamDto);
     }
 
@@ -79,7 +79,7 @@ public class TeamController {
      *         - On failure (e.g., team not found, validation errors): Appropriate error code (e.g., 404 Not Found, 400 Bad Request) with an error message.
      */
     @PatchMapping("/patch/{id}")
-    public ResponseEntity<Team> patchTeam (@PathVariable Long id ,@RequestBody TeamDto teamDto) {
+    public ResponseEntity<?> patchTeam (@PathVariable Long id ,@RequestBody TeamDto teamDto) {
         return teamService.patchTeam(id, teamDto);
     }
 
