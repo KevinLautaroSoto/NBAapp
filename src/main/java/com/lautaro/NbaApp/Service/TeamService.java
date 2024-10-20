@@ -69,7 +69,7 @@ public class TeamService {
                     .orElseThrow(() -> new CustomNotFoundException("Team with ID " + id + " not found."))
             );
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Couldn´t find the team with ID:" + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
@@ -87,10 +87,11 @@ public class TeamService {
                     .orElseThrow(() -> new CustomDatabaseException("Team not found with ID: " + id));
 
             TeamMapper.mapToTeam(teamUpdated, teamDto);
+            teamRepository.save(teamUpdated);
 
-            return ResponseEntity.ok(teamRepository.save(teamUpdated));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Error updating team with ID: " + id + "- " + teamDto.getFull_name());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
@@ -126,9 +127,10 @@ public class TeamService {
                 searchedTeam.setFull_name(teamDto.getFull_name());
             }
 
-            return ResponseEntity.ok(teamRepository.save(searchedTeam));
+            teamRepository.save(searchedTeam)
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Error patching a Team with ID: " + id + "- " + teamDto.getFull_name());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
@@ -147,9 +149,9 @@ public class TeamService {
 
             teamRepository.delete(teamToDelete);
 
-            return ResponseEntity.ok("Team with ID: " + id +  " successfully deleted from the database.");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error deleting Team with ID: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }
