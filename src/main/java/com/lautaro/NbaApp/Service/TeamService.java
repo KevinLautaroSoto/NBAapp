@@ -48,11 +48,11 @@ public class TeamService {
      * @return A list containing all Team objects representing existing teams.
      * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
      */
-    public ResponseEntity<List<Team>> getAllTeam() {
+    public ResponseEntity<?> getAllTeam() {
         try {
             return ResponseEntity.ok(teamRepository.findAll());
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Can´t retrieve the teams from the database. " + e);
         }
     }
 
@@ -63,13 +63,13 @@ public class TeamService {
      * @return An Optional object containing the requested Team object if found, or empty if not found.
      * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
      */
-    public ResponseEntity<Team> getTeamById(Long id) {
+    public ResponseEntity<?> getTeamById(Long id) {
         try {
             return ResponseEntity.ok(teamRepository.findById(id)
                     .orElseThrow(() -> new CustomNotFoundException("Team with ID " + id + " not found."))
             );
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Couldn´t find the team with ID:" + id);
         }
     }
 
@@ -81,7 +81,7 @@ public class TeamService {
      * @return The updated Team object after the update operation.
      * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
      */
-    public ResponseEntity<Team> updateTeam (Long id, TeamDto teamDto) {
+    public ResponseEntity<?> updateTeam (Long id, TeamDto teamDto) {
         try {
             Team teamUpdated = teamRepository.findById(id)
                     .orElseThrow(() -> new CustomDatabaseException("Team not found with ID: " + id));
@@ -90,7 +90,7 @@ public class TeamService {
 
             return ResponseEntity.ok(teamRepository.save(teamUpdated));
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating team with ID: " + id);
         }
     }
 
@@ -103,7 +103,7 @@ public class TeamService {
      * @throws       CustomNotFoundException     if a team with the provided ID is not found.
      * @throws       CustomDatabaseException   if a database error occurs during the update operation.
      */
-    public ResponseEntity<Team> patchTeam (Long id, TeamDto teamDto) {
+    public ResponseEntity<?> patchTeam (Long id, TeamDto teamDto) {
         try {
             Team searchedTeam = teamRepository.findById(id)
                     .orElseThrow(() -> new CustomNotFoundException("Team with ID " + id + " not found."));
@@ -128,7 +128,7 @@ public class TeamService {
 
             return ResponseEntity.ok(teamRepository.save(searchedTeam));
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error patching a Team with ID: " + id);
         }
     }
 
@@ -149,7 +149,7 @@ public class TeamService {
 
             return ResponseEntity.ok("Team with ID: " + id +  " successfully deleted from the database.");
         } catch (DataAccessException e) {
-            throw new CustomDatabaseException("Error deleting team from the database.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting Team with ID: " + id);
         }
     }
 }
