@@ -56,7 +56,7 @@ public class PlayerController {
      * @return The updated Player object after the update operation.
      * @throws Exception Throws an exception if an error occurs during player update.
      */
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updatePlayer(@PathVariable Long id, @RequestBody PlayerDto playerDto) {
         return playerService.updatePlayer(id, playerDto);
     }
@@ -70,6 +70,7 @@ public class PlayerController {
      * @param playerDto The data transfer object containing the new values for the player fields.
      * @return The updated Player entity after the patching process.
      */
+    @PatchMapping("/patch/{id}")
     public ResponseEntity<?> patchPlayer(@PathVariable Long id, @RequestBody PlayerDto playerDto) {
         return playerService.patchPlayer(id, playerDto);
     }

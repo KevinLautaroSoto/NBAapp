@@ -8,13 +8,12 @@ import com.lautaro.NbaApp.exceptions.CustomDatabaseException;
 import com.lautaro.NbaApp.exceptions.CustomNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.List;
-import java.util.Optional;
+import java.net.URI;
 
 @Service
 public class TeamService {
@@ -89,9 +88,17 @@ public class TeamService {
             TeamMapper.mapToTeam(teamUpdated, teamDto);
             teamRepository.save(teamUpdated);
 
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    //.path("") only use if the endopint require.
+                    .buildAndExpand(id)
+                    .toUri();
+
+            //return ResponseEntity.created(location).build(); Use this if don´t want to show more information.
+
+            return ResponseEntity.created(location).body(teamDto);
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -127,10 +134,10 @@ public class TeamService {
                 searchedTeam.setFull_name(teamDto.getFull_name());
             }
 
-            teamRepository.save(searchedTeam)
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            teamRepository.save(searchedTeam);
+            return ResponseEntity.noContent().build();
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.notFound().build();
         }
     }
 

@@ -11,7 +11,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -90,11 +92,17 @@ public class PlayerService {
 
             PlayerMapper.mapToPlayer(playerToUpdate, playerDto, teamService);
 
-            playerRepository.save(playerToUpdate)
+            playerRepository.save(playerToUpdate);
 
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    //.path("") only use if the endopint require.
+                    .buildAndExpand(id)
+                    .toUri();
+
+            return ResponseEntity.created(location).body(playerToUpdate);
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -147,11 +155,11 @@ public class PlayerService {
                 searchedPlayer.setDraft_number(playerDto.getDraft_number());
             }
 
-            playerRepository.save(searchedPlayer)
+            playerRepository.save(searchedPlayer);
 
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            return ResponseEntity.noContent().build();
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -169,9 +177,9 @@ public class PlayerService {
                     .orElseThrow(() -> new CustomDatabaseException("Player not found a player with ID: " + id));
 
             playerRepository.delete(playerToDelete);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            return ResponseEntity.noContent().build();
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.notFound().build();
         }
     }
 }
