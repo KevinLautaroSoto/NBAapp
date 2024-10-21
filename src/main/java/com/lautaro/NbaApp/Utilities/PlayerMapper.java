@@ -2,12 +2,12 @@ package com.lautaro.NbaApp.Utilities;
 
 import com.lautaro.NbaApp.Controller.Dto.PlayerDto;
 import com.lautaro.NbaApp.Models.Player;
-import com.lautaro.NbaApp.Service.TeamService;
+import com.lautaro.NbaApp.Service.Impl.TeamServiceImpl;
 
 public class PlayerMapper {
     //Convert a PlayerDto to a Player.
 
-    public static Player mapToPlayer(Player player, PlayerDto playerDto, TeamService teamService) {
+    public static Player mapToPlayer(Player player, PlayerDto playerDto, TeamServiceImpl teamServiceImpl) {
         if (playerDto == null) {
             return null;
         }
