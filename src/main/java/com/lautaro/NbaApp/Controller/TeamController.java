@@ -1,20 +1,16 @@
 package com.lautaro.NbaApp.Controller;
 
 import com.lautaro.NbaApp.Controller.Dto.TeamDto;
-import com.lautaro.NbaApp.Models.Team;
 import com.lautaro.NbaApp.Service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
 @RestController
-@RequestMapping("/api/team")
+@RequestMapping("/team")
 public class TeamController {
     @Autowired
-    private TeamService teamService;
+    private TeamService teamService;//Dynamic polymorphism.
 
     /**
      *Create a new team based on the provided TeamDto pbject.
@@ -23,8 +19,8 @@ public class TeamController {
      * @throws Exception throws an exception if an error occurs during team creation.
      */
     @PostMapping
-    public void createTeam (@RequestBody TeamDto teamDto) {
-        teamService.createTeam(teamDto);
+    public ResponseEntity<String> createTeam (@RequestBody TeamDto teamDto) {
+        return teamService.createTeam(teamDto);
     }
 
     /**
@@ -33,7 +29,7 @@ public class TeamController {
      * @return A list containing all Team objects representing existing teams.
      */
     @GetMapping
-    public List<Team> getAllTeam () {
+    public ResponseEntity<?> getAllTeam () {
         return teamService.getAllTeam();
     }
 
@@ -44,7 +40,7 @@ public class TeamController {
      * @return An Optional object containing the requested Team object if found, or empty if not found.
      */
     @GetMapping("/{id}")
-    public Optional<Team> getTeamById (@PathVariable Long id) {
+    public ResponseEntity<?> getTeamById (@PathVariable Long id) {
         return teamService.getTeamById(id);
     }
 
@@ -56,9 +52,24 @@ public class TeamController {
      * @return The updated Team object after the update operation.
      * @throws Exception Throws an exception if an error occurs during team update.
      */
-    @PutMapping("/{id}")
-    public Team updateTeam (@PathVariable Long id, @RequestBody TeamDto teamDto) {
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateTeam (@PathVariable Long id, @RequestBody TeamDto teamDto) {
         return teamService.updateTeam(id, teamDto);
+    }
+
+    /**
+     * Partially  
+     updates an existing team based on its unique identifier.
+     *
+     * @param id       The unique identifier (Long) of the team to be updated.
+     * @param teamDto The updated team data (TeamDto). Only the fields that need to be modified should be included.
+     * @return A ResponseEntity object with the updated team (Team) or an appropriate error response.
+     *         - On success: 200 OK with the updated team.
+     *         - On failure (e.g., team not found, validation errors): Appropriate error code (e.g., 404 Not Found, 400 Bad Request) with an error message.
+     */
+    @PatchMapping("/patch/{id}")
+    public ResponseEntity<?> patchTeam (@PathVariable Long id ,@RequestBody TeamDto teamDto) {
+        return teamService.patchTeam(id, teamDto);
     }
 
     /**
