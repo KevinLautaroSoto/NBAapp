@@ -1,7 +1,7 @@
 package com.lautaro.NbaApp.Controller;
 
 import com.lautaro.NbaApp.Controller.Dto.TeamDto;
-import com.lautaro.NbaApp.Service.Impl.TeamServiceImpl;
+import com.lautaro.NbaApp.Service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/team")
 public class TeamController {
     @Autowired
-    private TeamServiceImpl teamServiceImpl;
+    private TeamService teamService;//Dynamic polymorphism.
 
     /**
      *Create a new team based on the provided TeamDto pbject.
@@ -20,7 +20,7 @@ public class TeamController {
      */
     @PostMapping
     public ResponseEntity<String> createTeam (@RequestBody TeamDto teamDto) {
-        return teamServiceImpl.createTeam(teamDto);
+        return teamService.createTeam(teamDto);
     }
 
     /**
@@ -30,7 +30,7 @@ public class TeamController {
      */
     @GetMapping
     public ResponseEntity<?> getAllTeam () {
-        return teamServiceImpl.getAllTeam();
+        return teamService.getAllTeam();
     }
 
     /**
@@ -41,7 +41,7 @@ public class TeamController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<?> getTeamById (@PathVariable Long id) {
-        return teamServiceImpl.getTeamById(id);
+        return teamService.getTeamById(id);
     }
 
     /**
@@ -54,7 +54,7 @@ public class TeamController {
      */
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateTeam (@PathVariable Long id, @RequestBody TeamDto teamDto) {
-        return teamServiceImpl.updateTeam(id, teamDto);
+        return teamService.updateTeam(id, teamDto);
     }
 
     /**
@@ -69,7 +69,7 @@ public class TeamController {
      */
     @PatchMapping("/patch/{id}")
     public ResponseEntity<?> patchTeam (@PathVariable Long id ,@RequestBody TeamDto teamDto) {
-        return teamServiceImpl.patchTeam(id, teamDto);
+        return teamService.patchTeam(id, teamDto);
     }
 
     /**
@@ -82,6 +82,6 @@ public class TeamController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteTeam (@PathVariable Long id) {
-        return teamServiceImpl.deleteTeam(id);
+        return teamService.deleteTeam(id);
     }
 }

@@ -1,7 +1,7 @@
 package com.lautaro.NbaApp.Controller;
 
 import com.lautaro.NbaApp.Controller.Dto.PlayerDto;
-import com.lautaro.NbaApp.Service.Impl.PlayerServiceImpl;
+import com.lautaro.NbaApp.Service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/player")
 public class PlayerController {
     @Autowired
-    private PlayerServiceImpl playerServiceImpl;
+    private PlayerService playerService; //use dynamic polymorphism.
 
     /**
      * Creates a new player based on the provided PlayerDto object.
@@ -21,7 +21,7 @@ public class PlayerController {
      */
     @PostMapping
     public ResponseEntity<String> createPlayer(@RequestBody PlayerDto playerDto) {
-        return playerServiceImpl.createPlayer(playerDto);
+        return playerService.createPlayer(playerDto);
     }
 
     /**
@@ -31,7 +31,7 @@ public class PlayerController {
      */
     @GetMapping
     public ResponseEntity<?> getAllPlayers() {
-       return playerServiceImpl.getAllPlayers();
+       return playerService.getAllPlayers();
     }
 
     /**
@@ -42,7 +42,7 @@ public class PlayerController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<?> getPlayersById(@PathVariable Long id) {
-        return playerServiceImpl.getPlayerById(id);
+        return playerService.getPlayerById(id);
     }
 
     /**
@@ -55,7 +55,7 @@ public class PlayerController {
      */
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updatePlayer(@PathVariable Long id, @RequestBody PlayerDto playerDto) {
-        return playerServiceImpl.updatePlayer(id, playerDto);
+        return playerService.updatePlayer(id, playerDto);
     }
 
     /**
@@ -69,7 +69,7 @@ public class PlayerController {
      */
     @PatchMapping("/patch/{id}")
     public ResponseEntity<?> patchPlayer(@PathVariable Long id, @RequestBody PlayerDto playerDto) {
-        return playerServiceImpl.patchPlayer(id, playerDto);
+        return playerService.patchPlayer(id, playerDto);
     }
 
     /**
@@ -82,6 +82,6 @@ public class PlayerController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePlayer (@PathVariable Long id) {
-        return playerServiceImpl.deletePlayer(id);
+        return playerService.deletePlayer(id);
     }
 }
