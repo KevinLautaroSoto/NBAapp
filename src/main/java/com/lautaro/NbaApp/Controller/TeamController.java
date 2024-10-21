@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/team")
+@RequestMapping("/team")
 public class TeamController {
     @Autowired
     private TeamService teamService;
