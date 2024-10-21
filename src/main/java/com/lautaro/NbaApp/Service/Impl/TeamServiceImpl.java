@@ -31,6 +31,7 @@ public class TeamServiceImpl implements TeamService {
      *        - On success: 200 Ok with message "Team Successfully creates."
      *        - On failure: 500 Internal Server Error with detailed error message.
      */
+    @Override
     public ResponseEntity<String> createTeam(TeamDto teamDto) {
         try {
             Team newTeam = new Team();
@@ -48,6 +49,7 @@ public class TeamServiceImpl implements TeamService {
      * @return A list containing all Team objects representing existing teams.
      * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
      */
+    @Override
     public ResponseEntity<?> getAllTeam() {
         try {
             return ResponseEntity.ok(teamRepository.findAll());
@@ -63,6 +65,7 @@ public class TeamServiceImpl implements TeamService {
      * @return An Optional object containing the requested Team object if found, or empty if not found.
      * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
      */
+    @Override
     public ResponseEntity<?> getTeamById(Long id) {
         try {
             return ResponseEntity.ok(teamRepository.findById(id)
@@ -81,6 +84,7 @@ public class TeamServiceImpl implements TeamService {
      * @return The updated Team object after the update operation.
      * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
      */
+    @Override
     public ResponseEntity<?> updateTeam (Long id, TeamDto teamDto) {
         try {
             Team teamUpdated = teamRepository.findById(id)
@@ -112,6 +116,7 @@ public class TeamServiceImpl implements TeamService {
      * @throws       CustomNotFoundException     if a team with the provided ID is not found.
      * @throws       CustomDatabaseException   if a database error occurs during the update operation.
      */
+    @Override
     public ResponseEntity<?> patchTeam (Long id, TeamDto teamDto) {
         try {
             Team searchedTeam = teamRepository.findById(id)
@@ -150,6 +155,7 @@ public class TeamServiceImpl implements TeamService {
      *         - On success: 200 OK with a success message indicating the deleted team's ID.
      *         - On failure: Appropriate error code (e.g., 404 Not Found) with an error message.
      */
+    @Override
     public ResponseEntity<String> deleteTeam(Long id) {
         try {
             Team teamToDelete = teamRepository.findById(id)

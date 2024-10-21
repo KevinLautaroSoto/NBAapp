@@ -36,6 +36,7 @@ public class PlayerServiceImpl implements PlayerService {
      *         - On success: 201 Created with message "Player successfully created."
      *         - On failure: 500 Internal Server Error with detailed error message.
      */
+    @Override
     public ResponseEntity<String> createPlayer(PlayerDto playerDto) {
         try {
             Player newPlayer = new Player();
@@ -53,6 +54,7 @@ public class PlayerServiceImpl implements PlayerService {
      * @return A list containing all Player objects representing existing players.
      * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
      */
+    @Override
     public ResponseEntity<?> getAllPlayers() {
         try {
             return ResponseEntity.ok(playerRepository.findAll());
@@ -68,6 +70,7 @@ public class PlayerServiceImpl implements PlayerService {
      * @return An Optional object containing the requested Player object if found, or empty if not found.
      * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
      */
+    @Override
     public ResponseEntity<?> getPlayerById (Long id) {
         try {
             return ResponseEntity.ok(playerRepository.findById(id).orElseThrow(() -> new CustomNotFoundException("Player with that id couldn´t be found.")));
@@ -84,6 +87,7 @@ public class PlayerServiceImpl implements PlayerService {
      * @return The updated Player object after the update operation.
      * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
      */
+    @Override
     public ResponseEntity<?> updatePlayer(Long id, PlayerDto playerDto) {
         try {
             Player playerToUpdate = playerRepository.findById(id)
@@ -115,6 +119,7 @@ public class PlayerServiceImpl implements PlayerService {
      * @throws CustomNotFoundException    If the player with the specified ID is not found.
      * @throws CustomDatabaseException    If there is a database error while updating the player.
      */
+    @Override
     public ResponseEntity<?> patchPlayer(Long id, PlayerDto playerDto) {
         try {
             Player searchedPlayer = playerRepository.findById(id)
@@ -170,6 +175,7 @@ public class PlayerServiceImpl implements PlayerService {
      *         - On success: 200 OK with a success message indicating the deleted player's ID.
      *         - On failure: Appropriate error code (e.g., 404 Not Found) with an error message.
      */
+    @Override
     public ResponseEntity<String> deletePlayer(Long id) {
         try {
             Player playerToDelete = playerRepository.findById(id)
