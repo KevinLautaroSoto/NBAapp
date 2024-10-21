@@ -1,21 +1,10 @@
 package com.lautaro.NbaApp.Controller;
 
 import com.lautaro.NbaApp.Controller.Dto.TeamDto;
-import com.lautaro.NbaApp.Models.Team;
 import com.lautaro.NbaApp.Service.TeamService;
-import com.lautaro.NbaApp.exceptions.CustomDatabaseException;
-import com.lautaro.NbaApp.exceptions.CustomNotFoundException;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/team")

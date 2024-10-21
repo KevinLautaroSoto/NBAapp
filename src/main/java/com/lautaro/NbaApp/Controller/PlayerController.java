@@ -1,14 +1,11 @@
 package com.lautaro.NbaApp.Controller;
 
 import com.lautaro.NbaApp.Controller.Dto.PlayerDto;
-import com.lautaro.NbaApp.Models.Player;
 import com.lautaro.NbaApp.Service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/player")
