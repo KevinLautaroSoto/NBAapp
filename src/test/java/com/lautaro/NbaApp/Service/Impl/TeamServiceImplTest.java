@@ -12,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,8 +36,6 @@ class TeamServiceImplTest {
     @DisplayName("createTeam - valid teamDto, team created successfully")
     void createTeam_withValidTeamDto_returnsCreatedStatus() {
         TeamDto teamDto = new TeamDto("Lakers", "Los Angeles", "West", "Pacific", "LAL", "Los Angeles Lakers");
-        Team savedTeam = new Team(teamDto.getName(), teamDto.getCity(), teamDto.getAbbreviation(),
-                teamDto.getDivision(), teamDto.getConference(), teamDto.getFull_name());
 
         ResponseEntity<String> response = teamService.createTeam(teamDto);
 
@@ -51,7 +48,8 @@ class TeamServiceImplTest {
     void createTeam_whenDatabaseExceptionOccurs_returnsInternalServerError() {
         TeamDto teamDto = new TeamDto("Lakers", "Los Angeles", "West", "Pacific", "LAL", "Los Angeles Lakers");
 
-        Mockito.doThrow(new DataAccessException("DB error") {}).when(teamRepository).save(Mockito.any(Team.class));
+        Mockito.doThrow(new DataAccessException("DB error") {
+        }).when(teamRepository).save(Mockito.any(Team.class));
 
         ResponseEntity<String> response = teamService.createTeam(teamDto);
 
@@ -75,7 +73,8 @@ class TeamServiceImplTest {
     @Test
     @DisplayName("getAllTeam - database exception occurs")
     void getAllTeam_whenDatabaseExceptionOccurs_returnsNotFoundStatus() {
-        Mockito.when(teamRepository.findAll()).thenThrow(new DataAccessException("DB error") {});
+        Mockito.when(teamRepository.findAll()).thenThrow(new DataAccessException("DB error") {
+        });
 
         ResponseEntity<?> response = teamService.getAllTeam();
 
@@ -105,20 +104,18 @@ class TeamServiceImplTest {
     }
 
     /**
-
-    @Test
-    void updateTeam_withValidIdAndTeamDto_returnsUpdatedTeam() {
-        // Arrange
-        Team team = new Team("Lakers", "Los Angeles", "West", "Pacific", "LAL", "Los Angeles Lakers");
-        TeamDto teamDto = new TeamDto("Lakers", "Los Angeles", "West", "Pacific", "LAL", "Los Angeles Lakers");
-
-        // Act
-        ResponseEntity<?> response = teamService.updateTeam(1L, teamDto);
-
-        // Assert
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(teamDto, response.getBody());
-    }
+     * @Test void updateTeam_withValidIdAndTeamDto_returnsUpdatedTeam() {
+     * // Arrange
+     * Team team = new Team("Lakers", "Los Angeles", "West", "Pacific", "LAL", "Los Angeles Lakers");
+     * TeamDto teamDto = new TeamDto("Lakers", "Los Angeles", "West", "Pacific", "LAL", "Los Angeles Lakers");
+     * <p>
+     * // Act
+     * ResponseEntity<?> response = teamService.updateTeam(1L, teamDto);
+     * <p>
+     * // Assert
+     * assertEquals(HttpStatus.CREATED, response.getStatusCode());
+     * assertEquals(teamDto, response.getBody());
+     * }
      */
     @Test
     void updateTeam_withInvalidId_throwsException() {
