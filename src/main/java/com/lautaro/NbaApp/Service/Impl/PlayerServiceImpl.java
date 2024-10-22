@@ -44,7 +44,7 @@ public class PlayerServiceImpl implements PlayerService {
             playerRepository.save(newPlayer);
             return ResponseEntity.status(HttpStatus.CREATED).body("Player successfully created.");
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error crating player: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating player: " + e.getMessage());
         }
     }
 
