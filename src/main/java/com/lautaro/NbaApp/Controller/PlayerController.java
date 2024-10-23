@@ -31,7 +31,7 @@ public class PlayerController {
      */
     @GetMapping
     public ResponseEntity<?> getAllPlayers() {
-       return playerService.getAllPlayers();
+        return playerService.getAllPlayers();
     }
 
     /**
@@ -46,10 +46,21 @@ public class PlayerController {
     }
 
     /**
+     * Endpoint to get players by part of their name (case insensitive).
+     *
+     * @param name The part of the name to search for.
+     * @return ResponseEntity containing the list of players or a NOT_FOUND message.
+     */
+    @GetMapping("/name/{name}")
+    public ResponseEntity<?> getPlayerByName(@PathVariable String name) {
+        return playerService.getPlayerByName(name);
+    }
+
+    /**
      * Updates an existing player based on its identifier and provided PlayerDto object.
      *
-     * @param id       The unique identifier (Long) of the player to be updated.
-     * @param playerDto  The PlayerDto object containing updated information for the player.
+     * @param id        The unique identifier (Long) of the player to be updated.
+     * @param playerDto The PlayerDto object containing updated information for the player.
      * @return The updated Player object after the update operation.
      * @throws Exception Throws an exception if an error occurs during player update.
      */
@@ -77,11 +88,11 @@ public class PlayerController {
      *
      * @param id The unique identifier (Long) of the player to be deleted.
      * @return A ResponseEntity object with appropriate HTTP status code and message.
-     *         - On success: 200 OK with a success message indicating the deleted player's ID.
-     *         - On failure: Appropriate error code (e.g., 404 Not Found) with an error message.
+     * - On success: 200 OK with a success message indicating the deleted player's ID.
+     * - On failure: Appropriate error code (e.g., 404 Not Found) with an error message.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePlayer (@PathVariable Long id) {
+    public ResponseEntity<String> deletePlayer(@PathVariable Long id) {
         return playerService.deletePlayer(id);
     }
 }

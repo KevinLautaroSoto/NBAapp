@@ -18,6 +18,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -64,7 +65,8 @@ class PlayerServiceImplTest {
     void createPlayer_DatabaseError() {
         PlayerDto playerDto = new PlayerDto();
 
-        when(playerRepository.save(any(Player.class))).thenThrow(new DataAccessException("Database Error") {});
+        when(playerRepository.save(any(Player.class))).thenThrow(new DataAccessException("Database Error") {
+        });
 
         ResponseEntity<String> response = playerService.createPlayer(playerDto);
 
@@ -94,6 +96,71 @@ class PlayerServiceImplTest {
         });
 
         assertEquals("Player with that id couldn´t be found.", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("getPlayerByName - Successfully retrieves a list with players that match with input")
+    void getPlayerByName_Success() {
+        List<Player> players = List.of(new Player(
+                "LeBron",
+                "James",
+                "23",
+                "Forward",
+                "6-9",
+                "250 lbs",
+                "USA",
+                "None",
+                2003,
+                1,
+                1,
+                null
+        ), new Player(
+                "Stephen",
+                "Curry",
+                "30",
+                "Guard",
+                "6'2\"",
+                "185 lbs",
+                "USA",
+                "Davidson",
+                2009,
+                1,
+                7,
+                null
+        ));
+
+        when(playerRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase("lebron", "lebron"))
+                .thenReturn(players);
+
+        ResponseEntity<?> response = playerService.getPlayerByName("lebron");
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(players, response.getBody());
+    }
+
+    @Test
+    @DisplayName("getPlayerByName - Not Found exception occurs")
+    void getPlayersByName_NotFound() {
+        when(playerRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase("unknown", "unknown"))
+                .thenReturn(List.of());
+
+        ResponseEntity<?> response = playerService.getPlayerByName("unknown");
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals("No players found with name: unknown", response.getBody());
+    }
+
+    @Test
+    @DisplayName("getPlayerByName - Data access exception occurs")
+    void getPlayerByName_DataAccessException() {
+        when(playerRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase("lebron", "lebron"))
+                .thenThrow(new DataAccessException("Database access error") {
+                });
+
+        ResponseEntity<?> response = playerService.getPlayerByName("lebron");
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals("Error accessing the database: Database access error", response.getBody());
     }
 
     @Test
@@ -131,8 +198,8 @@ class PlayerServiceImplTest {
         Long playerId = 1L;
         Player existingPlayer = new Player();
         existingPlayer.setId(playerId);
-        existingPlayer.setFirst_name("Michael");
-        existingPlayer.setLast_name("Jordan");
+        existingPlayer.setFirstName("Michael");
+        existingPlayer.setLastName("Jordan");
 
         PlayerDto playerDto = new PlayerDto();
         playerDto.setFirst_name("Kobe");
@@ -144,7 +211,7 @@ class PlayerServiceImplTest {
         ResponseEntity<?> response = playerService.patchPlayer(playerId, playerDto);
 
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        assertEquals("Kobe", existingPlayer.getFirst_name());  // El nombre debe haber cambiado
+        assertEquals("Kobe", existingPlayer.getFirstName());  // El nombre debe haber cambiado
         assertEquals("198", existingPlayer.getHeight());         // La altura debe haber cambiado
 
         verify(playerRepository).save(existingPlayer);
@@ -174,14 +241,15 @@ class PlayerServiceImplTest {
         Long playerId = 1L;
         Player existingPlayer = new Player();
         existingPlayer.setId(playerId);
-        existingPlayer.setFirst_name("Michael");
+        existingPlayer.setFirstName("Michael");
 
         PlayerDto playerDto = new PlayerDto();
         playerDto.setFirst_name("Kobe");
 
         when(playerRepository.findById(playerId)).thenReturn(Optional.of(existingPlayer));
 
-        when(playerRepository.save(any(Player.class))).thenThrow(new DataAccessException("Error accessing database") {});
+        when(playerRepository.save(any(Player.class))).thenThrow(new DataAccessException("Error accessing database") {
+        });
 
         ResponseEntity<?> response = playerService.patchPlayer(playerId, playerDto);
 
@@ -189,7 +257,6 @@ class PlayerServiceImplTest {
 
         verify(playerRepository).save(existingPlayer);
     }
-
 
     @Test
     @DisplayName("deletePlayer - Successfully deletes a player")

@@ -11,6 +11,8 @@ public interface TeamService {
 
     ResponseEntity<?> getTeamById(Long id);
 
+    ResponseEntity<?> getTeamByName(String name);
+
     ResponseEntity<?> updateTeam(Long id, TeamDto teamDto);
 
     ResponseEntity<?> patchTeam (Long id, TeamDto teamDto);

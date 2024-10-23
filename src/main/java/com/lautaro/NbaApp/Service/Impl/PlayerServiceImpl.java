@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @Service
 public class PlayerServiceImpl implements PlayerService {
@@ -80,6 +81,31 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     /**
+     * Retrieves plauers whose names contain the specified string, ignoring case.
+     *
+     * @param name The name (or part of it) to search for.
+     * @return ResponseEntity containing the list of matching players or NOT_FOUND status.
+     */
+    @Override
+    public ResponseEntity<?> getPlayerByName (String name) {
+        try {
+            List<Player> players = playerRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(name, name);
+
+            if(!players.isEmpty()) {
+                return ResponseEntity.ok(players);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No players found with name: " + name);
+            }
+        } catch (DataAccessException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error accessing the database: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An unexpected error ocurred: " + e.getMessage());
+        }
+    }
+
+    /**
      * Updates an existing player based on its identifier and provided PlayerDto object.
      *
      * @param id       The unique identifier (Long) of the player to be updated.
@@ -125,10 +151,10 @@ public class PlayerServiceImpl implements PlayerService {
             Player searchedPlayer = playerRepository.findById(id)
                     .orElseThrow(() -> new CustomNotFoundException("Player with ID " + id + " not found."));
             if (playerDto.getFirst_name() != null) {
-                searchedPlayer.setFirst_name(playerDto.getFirst_name());
+                searchedPlayer.setFirstName(playerDto.getFirst_name());
             }
             if (playerDto.getLast_name() != null) {
-                searchedPlayer.setLast_name(playerDto.getLast_name());
+                searchedPlayer.setLastName(playerDto.getLast_name());
             }
 
             if (playerDto.getJersey_number() != null) {

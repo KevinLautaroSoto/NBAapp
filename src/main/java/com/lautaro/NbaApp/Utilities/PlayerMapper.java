@@ -12,8 +12,8 @@ public class PlayerMapper {
             return null;
         }
 
-        player.setFirst_name(playerDto.getFirst_name());
-        player.setLast_name(playerDto.getLast_name());
+        player.setFirstName(playerDto.getFirst_name());
+        player.setLastName(playerDto.getLast_name());
         player.setJersey_number(playerDto.getJersey_number());
         player.setPosition(playerDto.getPosition());
         player.setHeight(playerDto.getHeight());
