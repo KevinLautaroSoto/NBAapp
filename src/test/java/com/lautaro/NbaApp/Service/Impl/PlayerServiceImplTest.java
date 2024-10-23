@@ -5,6 +5,7 @@ import com.lautaro.NbaApp.Models.Player;
 import com.lautaro.NbaApp.Repository.PlayerRepository;
 import com.lautaro.NbaApp.exceptions.CustomDatabaseException;
 import com.lautaro.NbaApp.exceptions.CustomNotFoundException;
+import com.sun.net.httpserver.HttpsServer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -64,7 +66,8 @@ class PlayerServiceImplTest {
     void createPlayer_DatabaseError() {
         PlayerDto playerDto = new PlayerDto();
 
-        when(playerRepository.save(any(Player.class))).thenThrow(new DataAccessException("Database Error") {});
+        when(playerRepository.save(any(Player.class))).thenThrow(new DataAccessException("Database Error") {
+        });
 
         ResponseEntity<String> response = playerService.createPlayer(playerDto);
 
@@ -94,6 +97,70 @@ class PlayerServiceImplTest {
         });
 
         assertEquals("Player with that id couldn´t be found.", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("getPlayerByName - ")
+    void getPlayerByName_Success() {
+        List<Player> players = List.of(new Player(
+                "LeBron",
+                "James",
+                "23",
+                "Forward",
+                "6-9",
+                "250 lbs",
+                "USA",
+                "None",
+                2003,
+                1,
+                1,
+                null
+        ), new Player(
+                "Stephen",
+                "Curry",
+                "30",
+                "Guard",
+                "6'2\"",
+                "185 lbs",
+                "USA",
+                "Davidson",
+                2009,
+                1,
+                7,
+                null
+        ));
+
+        when(playerRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase("lebron", "lebron"))
+                .thenReturn(players);
+
+        ResponseEntity<?> response = playerService.getPlayerByName("lebron");
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(players, response.getBody());
+    }
+
+    @Test
+    @DisplayName("getPlayerByName - ")
+    void getPlayersByName_NotFound() {
+        when(playerRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase("unknown", "unknown"))
+                .thenReturn(List.of());
+
+        ResponseEntity<?> response = playerService.getPlayerByName("unknown");
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals("No players found with name: unknown", response.getBody());
+    }
+
+    @Test
+    @DisplayName("getPlayerByName - ")
+    void getPlayerByName_DataAccessException() {
+        when(playerRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase("lebron", "lebron"))
+                .thenThrow(new DataAccessException("Database access error") {});
+
+        ResponseEntity<?> response = playerService.getPlayerByName("lebron");
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals("Error accessing the database: Database access error", response.getBody());
     }
 
     @Test
@@ -181,7 +248,8 @@ class PlayerServiceImplTest {
 
         when(playerRepository.findById(playerId)).thenReturn(Optional.of(existingPlayer));
 
-        when(playerRepository.save(any(Player.class))).thenThrow(new DataAccessException("Error accessing database") {});
+        when(playerRepository.save(any(Player.class))).thenThrow(new DataAccessException("Error accessing database") {
+        });
 
         ResponseEntity<?> response = playerService.patchPlayer(playerId, playerDto);
 

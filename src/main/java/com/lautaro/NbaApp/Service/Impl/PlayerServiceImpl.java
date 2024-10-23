@@ -94,7 +94,7 @@ public class PlayerServiceImpl implements PlayerService {
             if(!players.isEmpty()) {
                 return ResponseEntity.ok(players);
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No players found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No players found with name: " + name);
             }
         } catch (DataAccessException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
