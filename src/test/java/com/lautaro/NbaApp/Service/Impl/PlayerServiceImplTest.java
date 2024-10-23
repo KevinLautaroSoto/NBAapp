@@ -5,7 +5,6 @@ import com.lautaro.NbaApp.Models.Player;
 import com.lautaro.NbaApp.Repository.PlayerRepository;
 import com.lautaro.NbaApp.exceptions.CustomDatabaseException;
 import com.lautaro.NbaApp.exceptions.CustomNotFoundException;
-import com.sun.net.httpserver.HttpsServer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -155,7 +154,8 @@ class PlayerServiceImplTest {
     @DisplayName("getPlayerByName - ")
     void getPlayerByName_DataAccessException() {
         when(playerRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase("lebron", "lebron"))
-                .thenThrow(new DataAccessException("Database access error") {});
+                .thenThrow(new DataAccessException("Database access error") {
+                });
 
         ResponseEntity<?> response = playerService.getPlayerByName("lebron");
 
@@ -257,7 +257,6 @@ class PlayerServiceImplTest {
 
         verify(playerRepository).save(existingPlayer);
     }
-
 
     @Test
     @DisplayName("deletePlayer - Successfully deletes a player")
