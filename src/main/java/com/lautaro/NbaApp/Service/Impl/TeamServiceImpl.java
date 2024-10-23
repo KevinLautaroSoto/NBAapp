@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -78,20 +79,20 @@ public class TeamServiceImpl implements TeamService {
     }
 
     /**
-     * Retrieves a team by its name using a try-catch block to handle exceptions.
+     * Retrieves teams whose names contain the specified string, ignoring case.
      *
-     * @param name The name of the team to retrieve.
-     * @return ResponseEntity containing the found team or a NOT_FOUND status if no team is found.
+     * @param name The name (or part of it) to search for.
+     * @return ResponseEntity containing the list of matching teams or NOT_FOUND status.
      */
     @Override
     public ResponseEntity<?> getTeamByName(String name) {
         try {
-            Optional<Team> team = teamRepository.findByName(name);
+            List<Team> teams = teamRepository.findByNameContainingIgnoreCase(name);
 
-            if (team.isPresent()){
-                return ResponseEntity.ok(team.get());
+            if (!teams.isEmpty()){
+                return ResponseEntity.ok(teams);
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Team not found with name: " + name);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No teams found containing name: " + name);
             }
         } catch (DataAccessException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

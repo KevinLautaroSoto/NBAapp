@@ -47,10 +47,10 @@ public class TeamController {
     }
 
     /**
-     * Endpoint to get a team by its name.
+     * Endpoint to get teams by part of their name (case insensitive).
      *
-     * @param name The name of the team.
-     * @return ResponseEntity containing the team or a NOT_FOUND message.
+     * @param name The part of the name to search for.
+     * @return ResponseEntity containing the list of teams or a NOT_FOUND message.
      */
     @GetMapping("/name/{name}")
     public ResponseEntity<?> getTeamByName (@PathVariable String name) {
