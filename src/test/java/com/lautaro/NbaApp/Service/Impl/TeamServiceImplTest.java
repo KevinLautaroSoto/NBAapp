@@ -13,6 +13,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -62,23 +66,29 @@ class TeamServiceImplTest {
     @Test
     @DisplayName("getAllTeam - successfully retrieves all teams")
     void getAllTeam_returnAllTeams() {
-        List<Team> teams = List.of(new Team("Lakers", "Los Angeles", "West", "Pacific", "LAL", "Los Angeles Lakers"), new Team("Warriors", "San Francisco", "West", "Pacific", "GSW", "Golden State Warriors"));
+        List<Team> teams = List.of(
+                new Team("Lakers", "Los Angeles", "West", "Pacific", "LAL", "Los Angeles Lakers"),
+                new Team("Warriors", "San Francisco", "West", "Pacific", "GSW", "Golden State Warriors"));
 
-        Mockito.when(teamRepository.findAll()).thenReturn(teams);
+        Page<Team> teamPage = new PageImpl<>(teams, PageRequest.of(0, 10), teams.size());
 
-        ResponseEntity<?> response = teamService.getAllTeam();
+        when(teamRepository.findAll(Mockito.any(Pageable.class)))
+                .thenReturn(teamPage);
+
+        ResponseEntity<?> response = teamService.getAllTeam(PageRequest.of(0,10));
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(teams, response.getBody());
+        assertEquals(teamPage, response.getBody());
     }
 
     @Test
     @DisplayName("getAllTeam - database exception occurs")
     void getAllTeam_whenDatabaseExceptionOccurs_returnsNotFoundStatus() {
-        Mockito.when(teamRepository.findAll()).thenThrow(new DataAccessException("DB error") {
+        when(teamRepository.findAll(Mockito.any(Pageable.class)))
+                .thenThrow(new DataAccessException("DB error") {
         });
 
-        ResponseEntity<?> response = teamService.getAllTeam();
+        ResponseEntity<?> response = teamService.getAllTeam(PageRequest.of(0,10));
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertEquals("Can´t retrieve the teams from the database. DB error", response.getBody());

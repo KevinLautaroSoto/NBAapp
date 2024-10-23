@@ -9,6 +9,8 @@ import com.lautaro.NbaApp.exceptions.CustomDatabaseException;
 import com.lautaro.NbaApp.exceptions.CustomNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -55,9 +57,10 @@ public class TeamServiceImpl implements TeamService {
      * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
      */
     @Override
-    public ResponseEntity<?> getAllTeam() {
+    public ResponseEntity<?> getAllTeam(Pageable pageable) {
         try {
-            return ResponseEntity.ok(teamRepository.findAll());
+            Page<Team> teamsPage = teamRepository.findAll(pageable);
+            return ResponseEntity.ok(teamsPage);
         } catch (DataAccessException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can´t retrieve the teams from the database. " + e.getMessage());
         }
