@@ -102,8 +102,8 @@ public class ExternalApiService {
                     //Save players into the database.
                     players.forEach(playerDto -> {
                         Player player = new Player(); //Create player entity for storage.
-                        player.setFirst_name(playerDto.getFirst_name());
-                        player.setLast_name(playerDto.getLast_name());
+                        player.setFirstName(playerDto.getFirst_name());
+                        player.setLastName(playerDto.getLast_name());
                         player.setPosition(playerDto.getPosition());
                         player.setHeight(playerDto.getHeight());
                         player.setWeight(playerDto.getWeight());

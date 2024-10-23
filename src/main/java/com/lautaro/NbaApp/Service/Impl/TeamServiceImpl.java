@@ -24,14 +24,17 @@ public class TeamServiceImpl implements TeamService {
     private final TeamRepository teamRepository;
 
     @Autowired
-    private TeamServiceImpl(TeamRepository teamRepository) {this.teamRepository = teamRepository;}
+    private TeamServiceImpl(TeamRepository teamRepository) {
+        this.teamRepository = teamRepository;
+    }
 
     /**
      * Creates a new team adn persists it to the databsae.
+     *
      * @param teamDto The teamDto object containing information about the team to be created.
      * @return A ResponseEntity object with appropriate HTTP status code and message.
-     *        - On success: 200 Ok with message "Team Successfully creates."
-     *        - On failure: 500 Internal Server Error with detailed error message.
+     * - On success: 200 Ok with message "Team Successfully creates."
+     * - On failure: 500 Internal Server Error with detailed error message.
      */
     @Override
     public ResponseEntity<String> createTeam(TeamDto teamDto) {
@@ -89,14 +92,14 @@ public class TeamServiceImpl implements TeamService {
         try {
             List<Team> teams = teamRepository.findByNameContainingIgnoreCase(name);
 
-            if (!teams.isEmpty()){
+            if (!teams.isEmpty()) {
                 return ResponseEntity.ok(teams);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No teams found containing name: " + name);
             }
         } catch (DataAccessException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error accessing the databse: " + e.getMessage());
+                    .body("Error accessing the database: " + e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An unexpected error occurred: " + e.getMessage());
@@ -106,13 +109,13 @@ public class TeamServiceImpl implements TeamService {
     /**
      * Updates an existing team based on its identifier and provided TeamDto object.
      *
-     * @param id       The unique identifier (Long) of the team to be updated.
-     * @param teamDto  The TeamDto object containing updated information for the team.
+     * @param id      The unique identifier (Long) of the team to be updated.
+     * @param teamDto The TeamDto object containing updated information for the team.
      * @return The updated Team object after the update operation.
      * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
      */
     @Override
-    public ResponseEntity<?> updateTeam (Long id, TeamDto teamDto) {
+    public ResponseEntity<?> updateTeam(Long id, TeamDto teamDto) {
         try {
             Team teamUpdated = teamRepository.findById(id)
                     .orElseThrow(() -> new CustomDatabaseException("Team not found with ID: " + id));
@@ -137,14 +140,14 @@ public class TeamServiceImpl implements TeamService {
     /**
      * Partially updates an existing team entity based on its unique identifier.
      *
-     * @param id       The unique identifier (Long) of the team to be updated.
-     * @param teamDto  The updated team data (TeamDto). Only fields with non-null values will be applied to the existing team.
-     * @return        The updated team entity (Team) on success, or throws an exception on failure.
-     * @throws       CustomNotFoundException     if a team with the provided ID is not found.
-     * @throws       CustomDatabaseException   if a database error occurs during the update operation.
+     * @param id      The unique identifier (Long) of the team to be updated.
+     * @param teamDto The updated team data (TeamDto). Only fields with non-null values will be applied to the existing team.
+     * @return The updated team entity (Team) on success, or throws an exception on failure.
+     * @throws CustomNotFoundException if a team with the provided ID is not found.
+     * @throws CustomDatabaseException if a database error occurs during the update operation.
      */
     @Override
-    public ResponseEntity<?> patchTeam (Long id, TeamDto teamDto) {
+    public ResponseEntity<?> patchTeam(Long id, TeamDto teamDto) {
         try {
             Team searchedTeam = teamRepository.findById(id)
                     .orElseThrow(() -> new CustomNotFoundException("Team with ID " + id + " not found."));
@@ -179,8 +182,8 @@ public class TeamServiceImpl implements TeamService {
      *
      * @param id The unique identifier (Long) of the team to be deleted.
      * @return A ResponseEntity object with appropriate HTTP status code and message.
-     *         - On success: 200 OK with a success message indicating the deleted team's ID.
-     *         - On failure: Appropriate error code (e.g., 404 Not Found) with an error message.
+     * - On success: 200 OK with a success message indicating the deleted team's ID.
+     * - On failure: Appropriate error code (e.g., 404 Not Found) with an error message.
      */
     @Override
     public ResponseEntity<String> deleteTeam(Long id) {

@@ -7,8 +7,8 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String first_name;
-    private String last_name;
+    private String firstName;
+    private String lastName;
     private String jersey_number;
     private String position;
     private String height;
@@ -28,9 +28,9 @@ public class Player {
     //Default constructor
     public Player() {}
 
-    public Player(String first_name, String last_name, String jersey_number, String position, String height, String weight, String country, String college, int draft_year, int draft_round, int draft_number, Team team) {
-        this.first_name = first_name;
-        this.last_name = last_name;
+    public Player(String firstName, String lastName, String jersey_number, String position, String height, String weight, String country, String college, int draft_year, int draft_round, int draft_number, Team team) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.jersey_number = jersey_number;
         this.position = position;
         this.height = height;
@@ -51,20 +51,20 @@ public class Player {
         this.id = id;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getJersey_number() {
@@ -151,8 +151,8 @@ public class Player {
     public String toString() {
         return "Player{" +
                 "id=" + id +
-                ", first_name='" + first_name + '\'' +
-                ", last_name='" + last_name + '\'' +
+                ", first_name='" + firstName + '\'' +
+                ", last_name='" + lastName + '\'' +
                 ", jersey_number=" + jersey_number +
                 ", position='" + position + '\'' +
                 ", height=" + height +
