@@ -15,13 +15,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TeamServiceImplTest {
@@ -103,20 +105,70 @@ class TeamServiceImplTest {
         assertEquals("Team with ID 1 not found.", exception.getMessage());
     }
 
-    /**
-     * @Test void updateTeam_withValidIdAndTeamDto_returnsUpdatedTeam() {
-     * // Arrange
-     * Team team = new Team("Lakers", "Los Angeles", "West", "Pacific", "LAL", "Los Angeles Lakers");
-     * TeamDto teamDto = new TeamDto("Lakers", "Los Angeles", "West", "Pacific", "LAL", "Los Angeles Lakers");
-     * <p>
-     * // Act
-     * ResponseEntity<?> response = teamService.updateTeam(1L, teamDto);
-     * <p>
-     * // Assert
-     * assertEquals(HttpStatus.CREATED, response.getStatusCode());
-     * assertEquals(teamDto, response.getBody());
-     * }
-     */
+    @Test
+    @DisplayName("getTeamByName - successfully retrieves a list with players that match the input")
+    void getTeamByName_Success() {
+        List<Team> teams = List.of(new Team("Lakers", "Los Angeles", "West", "Pacific", "LAL", "Los Angeles Lakers"), new Team("Warriors", "San Francisco", "West", "Pacific", "GSW", "Golden State Warriors"));
+
+        when(teamRepository.findByNameContainingIgnoreCase("lake"))
+                .thenReturn(teams);
+
+        ResponseEntity<?> response = teamService.getTeamByName("lake");
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(teams, response.getBody());
+    }
+
+    @Test
+    @DisplayName("getTeamByName - Not Found exception throws")
+    void getTeamByName_NotFound() {
+        when(teamRepository.findByNameContainingIgnoreCase("unknown"))
+                .thenReturn(List.of());
+
+        ResponseEntity<?> response = teamService.getTeamByName("unknown");
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals("No teams found containing name: unknown", response.getBody());
+    }
+
+    @Test
+    @DisplayName("getTeamByName - Data access errors occurs")
+    void getTeamByName_DataAccessException() {
+        when(teamRepository.findByNameContainingIgnoreCase("lake"))
+                .thenThrow(new DataAccessException("Data access error") {
+                });
+
+        ResponseEntity<?> response = teamService.getTeamByName("lake");
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals("Error accessing the database: Data access error", response.getBody());
+    }
+
+
+    @Test
+    @DisplayName("updateTeam - Successfully updates a team with a valid ID and TeamDto")
+    void updateTeam_withValidIdAndTeamDto_returnsUpdatedTeam() {
+        MockHttpServletRequest  request = new MockHttpServletRequest();
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+
+        // Arrange
+        Team team = new Team("Lakers", "Los Angeles", "West", "Pacific", "LAL", "Los Angeles Lakers");
+        TeamDto teamDto = new TeamDto("Lakers", "Los Angeles", "West", "Pacific", "LAL", "Los Angeles Lakers");
+
+        when(teamRepository.findById(1L))
+                .thenReturn(Optional.of(team));
+
+        when(teamRepository.save(any(Team.class)))
+                .thenReturn(team);
+
+        // Act
+        ResponseEntity<?> response = teamService.updateTeam(1L, teamDto);
+
+        // Assert
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(teamDto, response.getBody());
+    }
+
     @Test
     void updateTeam_withInvalidId_throwsException() {
 
