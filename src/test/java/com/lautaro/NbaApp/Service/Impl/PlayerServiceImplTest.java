@@ -99,7 +99,7 @@ class PlayerServiceImplTest {
     }
 
     @Test
-    @DisplayName("getPlayerByName - ")
+    @DisplayName("getPlayerByName - Successfully retrieves a list with players that match with input")
     void getPlayerByName_Success() {
         List<Player> players = List.of(new Player(
                 "LeBron",
@@ -139,7 +139,7 @@ class PlayerServiceImplTest {
     }
 
     @Test
-    @DisplayName("getPlayerByName - ")
+    @DisplayName("getPlayerByName - Not Found exception occurs")
     void getPlayersByName_NotFound() {
         when(playerRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase("unknown", "unknown"))
                 .thenReturn(List.of());
@@ -151,7 +151,7 @@ class PlayerServiceImplTest {
     }
 
     @Test
-    @DisplayName("getPlayerByName - ")
+    @DisplayName("getPlayerByName - Data access exception occurs")
     void getPlayerByName_DataAccessException() {
         when(playerRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase("lebron", "lebron"))
                 .thenThrow(new DataAccessException("Database access error") {

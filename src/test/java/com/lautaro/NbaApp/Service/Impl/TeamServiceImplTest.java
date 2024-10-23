@@ -144,7 +144,6 @@ class TeamServiceImplTest {
         assertEquals("Error accessing the database: Data access error", response.getBody());
     }
 
-
     @Test
     @DisplayName("updateTeam - Successfully updates a team with a valid ID and TeamDto")
     void updateTeam_withValidIdAndTeamDto_returnsUpdatedTeam() {
@@ -170,12 +169,12 @@ class TeamServiceImplTest {
     }
 
     @Test
+    @DisplayName("updateTeam - Not Found exception occurs")
     void updateTeam_withInvalidId_throwsException() {
 
         Exception exception = assertThrows(CustomDatabaseException.class, () -> teamService.updateTeam(1L, new TeamDto()));
         assertEquals("Team not found with ID: 1", exception.getMessage());
     }
-
 
     @Test
     @DisplayName("patchTeam - valid ID, updates team partially")
@@ -200,7 +199,6 @@ class TeamServiceImplTest {
         Exception exception = assertThrows(CustomNotFoundException.class, () -> teamService.patchTeam(1L, new TeamDto()));
         assertEquals("Team with ID 1 not found.", exception.getMessage());
     }
-
 
     @Test
     @DisplayName("deleteTeam - valid ID, deletes team successfully")
