@@ -11,6 +11,8 @@ public interface PlayerService {
 
     ResponseEntity<?> getPlayerById(Long id);
 
+    ResponseEntity<?> getPlayerByName(String name);
+
     ResponseEntity<?> updatePlayer(Long id, PlayerDto playerDto);
 
     ResponseEntity<?> patchPlayer(Long id, PlayerDto playerDto);

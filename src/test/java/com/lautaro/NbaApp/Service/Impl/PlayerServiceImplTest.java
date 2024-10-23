@@ -131,8 +131,8 @@ class PlayerServiceImplTest {
         Long playerId = 1L;
         Player existingPlayer = new Player();
         existingPlayer.setId(playerId);
-        existingPlayer.setFirst_name("Michael");
-        existingPlayer.setLast_name("Jordan");
+        existingPlayer.setFirstName("Michael");
+        existingPlayer.setLastName("Jordan");
 
         PlayerDto playerDto = new PlayerDto();
         playerDto.setFirst_name("Kobe");
@@ -144,7 +144,7 @@ class PlayerServiceImplTest {
         ResponseEntity<?> response = playerService.patchPlayer(playerId, playerDto);
 
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        assertEquals("Kobe", existingPlayer.getFirst_name());  // El nombre debe haber cambiado
+        assertEquals("Kobe", existingPlayer.getFirstName());  // El nombre debe haber cambiado
         assertEquals("198", existingPlayer.getHeight());         // La altura debe haber cambiado
 
         verify(playerRepository).save(existingPlayer);
@@ -174,7 +174,7 @@ class PlayerServiceImplTest {
         Long playerId = 1L;
         Player existingPlayer = new Player();
         existingPlayer.setId(playerId);
-        existingPlayer.setFirst_name("Michael");
+        existingPlayer.setFirstName("Michael");
 
         PlayerDto playerDto = new PlayerDto();
         playerDto.setFirst_name("Kobe");
