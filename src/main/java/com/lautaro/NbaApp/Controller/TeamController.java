@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Array;
+
 @RestController
 @RequestMapping("/team")
 public class TeamController {
@@ -42,6 +44,17 @@ public class TeamController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getTeamById (@PathVariable Long id) {
         return teamService.getTeamById(id);
+    }
+
+    /**
+     * Endpoint to get a team by its name.
+     *
+     * @param name The name of the team.
+     * @return ResponseEntity containing the team or a NOT_FOUND message.
+     */
+    @GetMapping("/name/{name}")
+    public ResponseEntity<?> getTeamByName (@PathVariable String name) {
+        return teamService.getTeamByName(name);
     }
 
     /**

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Optional;
 
 @Service
 public class TeamServiceImpl implements TeamService {
@@ -73,6 +74,31 @@ public class TeamServiceImpl implements TeamService {
             );
         } catch (DataAccessException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    /**
+     * Retrieves a team by its name using a try-catch block to handle exceptions.
+     *
+     * @param name The name of the team to retrieve.
+     * @return ResponseEntity containing the found team or a NOT_FOUND status if no team is found.
+     */
+    @Override
+    public ResponseEntity<?> getTeamByName(String name) {
+        try {
+            Optional<Team> team = teamRepository.findByName(name);
+
+            if (team.isPresent()){
+                return ResponseEntity.ok(team.get());
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Team not found with name: " + name);
+            }
+        } catch (DataAccessException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error accessing the databse: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An unexpected error occurred: " + e.getMessage());
         }
     }
 
