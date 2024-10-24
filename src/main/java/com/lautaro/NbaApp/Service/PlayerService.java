@@ -1,13 +1,14 @@
 package com.lautaro.NbaApp.Service;
 
 import com.lautaro.NbaApp.Controller.Dto.PlayerDto;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 public interface PlayerService {
 
     ResponseEntity<String> createPlayer(PlayerDto playerDto);
 
-    ResponseEntity<?> getAllPlayers();
+    ResponseEntity<?> getAllPlayers(Pageable pageable);
 
     ResponseEntity<?> getPlayerById(Long id);
 

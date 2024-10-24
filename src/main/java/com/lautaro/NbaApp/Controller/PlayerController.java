@@ -3,6 +3,8 @@ package com.lautaro.NbaApp.Controller;
 import com.lautaro.NbaApp.Controller.Dto.PlayerDto;
 import com.lautaro.NbaApp.Service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,11 +29,15 @@ public class PlayerController {
     /**
      * Retrieves all players stored in the database.
      *
+     * @param page The page number to retrieve (0-indexed).
+     * @param size The number of players per page.
      * @return A list containing all Player objects representing existing players.
      */
     @GetMapping
-    public ResponseEntity<?> getAllPlayers() {
-        return playerService.getAllPlayers();
+    public ResponseEntity<?> getAllPlayers(@RequestParam (defaultValue = "0")int page,
+                                           @RequestParam (defaultValue = "10")int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return playerService.getAllPlayers(pageable);
     }
 
     /**

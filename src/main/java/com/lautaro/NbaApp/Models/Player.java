@@ -19,14 +19,9 @@ public class Player {
     private int draft_round;
     private int draft_number;
 
-    //nba team
     @ManyToOne
     @JoinColumn(name = "teamId")
     private Team team;
-
-
-    //Default constructor
-    public Player() {}
 
     public Player(String firstName, String lastName, String jersey_number, String position, String height, String weight, String country, String college, int draft_year, int draft_round, int draft_number, Team team) {
         this.firstName = firstName;
@@ -42,6 +37,11 @@ public class Player {
         this.draft_number = draft_number;
         this.team = team;
     }
+
+    //Default constructor
+    public Player() {
+    }
+
 
     public Long getId() {
         return id;

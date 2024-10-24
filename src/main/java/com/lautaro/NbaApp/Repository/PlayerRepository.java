@@ -1,6 +1,8 @@
 package com.lautaro.NbaApp.Repository;
 
 import com.lautaro.NbaApp.Models.Player;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +18,6 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
      * @return A list of players with matching first name or last name.
      */
     List<Player> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(String firstName, String lastName);
+
+    Page<Player> findAll (Pageable pageable);
 }

@@ -12,6 +12,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -45,7 +49,6 @@ class PlayerServiceImplTest {
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
     }
 
-
     @Test
     @DisplayName("createPlayer - Successfully creates a player")
     void createPlayer_Success() {
@@ -74,6 +77,61 @@ class PlayerServiceImplTest {
         assertEquals("Error creating player: Database Error", response.getBody());
     }
 
+    //Hacer test para getAllPlayers with paging.
+    @Test
+    @DisplayName("getAllPlayer - ")
+    void getAllPlayers_returnAllPLayers() {
+        List<Player> players = List.of(
+                new Player("LeBron",
+                        "James",
+                        "23",
+                        "Forward",
+                        "6'9\"",
+                        "250 lbs",
+                        "USA",
+                        "None",
+                        2003,
+                        1,
+                        1,
+                        null),
+                new Player(
+                        "Stephen",
+                        "Curry",
+                        "30",
+                        "Guard",
+                        "6'3\"",
+                        "185 lbs",
+                        "USA",
+                        "Davidson",
+                        2009,
+                        1,
+                        7,
+                        null
+                ));
+
+        Page<Player> playerPage = new PageImpl<>(players);
+
+        when(playerRepository.findAll(any(Pageable.class)))
+                .thenReturn(playerPage);
+
+        ResponseEntity<?> response = playerService.getAllPlayers(PageRequest.of(0, 10));
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(playerPage, response.getBody());
+    }
+
+    @Test
+    @DisplayName("getAllPlayer - ")
+    void getAllPlayers_whenDataBaseExceptionOccurs_returnsNotFoundStatus() {
+        when(playerRepository.findAll(any(Pageable.class)))
+                .thenThrow(new DataAccessException("DB error") {});
+
+        ResponseEntity<?> response = playerService.getAllPlayers(PageRequest.of(0, 10));
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals("Error getting player from the database.", response.getBody());
+    }
+
     @Test
     @DisplayName("getPlayerById - Successfully retrieves player by ID")
     void getPlayerById_Success() {
@@ -99,7 +157,7 @@ class PlayerServiceImplTest {
     }
 
     @Test
-    @DisplayName("getPlayerByName - ")
+    @DisplayName("getPlayerByName - Successfully retrieves players by name")
     void getPlayerByName_Success() {
         List<Player> players = List.of(new Player(
                 "LeBron",
@@ -139,7 +197,7 @@ class PlayerServiceImplTest {
     }
 
     @Test
-    @DisplayName("getPlayerByName - ")
+    @DisplayName("getPlayerByName - Throws Not Found Exeception when player not found")
     void getPlayersByName_NotFound() {
         when(playerRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase("unknown", "unknown"))
                 .thenReturn(List.of());
@@ -151,7 +209,7 @@ class PlayerServiceImplTest {
     }
 
     @Test
-    @DisplayName("getPlayerByName - ")
+    @DisplayName("getPlayerByName - Throw Database access error")
     void getPlayerByName_DataAccessException() {
         when(playerRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase("lebron", "lebron"))
                 .thenThrow(new DataAccessException("Database access error") {
