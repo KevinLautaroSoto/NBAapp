@@ -1,6 +1,9 @@
 package com.lautaro.NbaApp.Repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import com.lautaro.NbaApp.Models.Team;
 
@@ -16,4 +19,6 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
      * @return A list of teams with names containing the input string.
      */
     List<Team> findByNameContainingIgnoreCase(String name);
+
+    Page<Team> findAll(Pageable pageable);
 }

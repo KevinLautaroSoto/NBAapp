@@ -1,13 +1,14 @@
 package com.lautaro.NbaApp.Service;
 
 import com.lautaro.NbaApp.Controller.Dto.TeamDto;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 public interface TeamService {
 
     ResponseEntity<String> createTeam(TeamDto teamDto);
 
-    ResponseEntity<?> getAllTeam();
+    ResponseEntity<?> getAllTeam(Pageable pageable);
 
     ResponseEntity<?> getTeamById(Long id);
 

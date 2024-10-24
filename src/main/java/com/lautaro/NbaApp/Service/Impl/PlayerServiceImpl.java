@@ -9,6 +9,8 @@ import com.lautaro.NbaApp.exceptions.CustomDatabaseException;
 import com.lautaro.NbaApp.exceptions.CustomNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -56,9 +58,10 @@ public class PlayerServiceImpl implements PlayerService {
      * @throws CustomDatabaseException Throws a custom exception if a data access error occurs.
      */
     @Override
-    public ResponseEntity<?> getAllPlayers() {
+    public ResponseEntity<?> getAllPlayers(Pageable pageable) {
         try {
-            return ResponseEntity.ok(playerRepository.findAll());
+            Page<Player> playerPage = playerRepository.findAll(pageable);
+            return ResponseEntity.ok(playerPage);
         } catch (DataAccessException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error getting player from the database.");
         }

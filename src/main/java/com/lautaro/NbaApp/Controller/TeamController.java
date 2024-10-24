@@ -3,6 +3,8 @@ package com.lautaro.NbaApp.Controller;
 import com.lautaro.NbaApp.Controller.Dto.TeamDto;
 import com.lautaro.NbaApp.Service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,13 +28,18 @@ public class TeamController {
     }
 
     /**
-     * Retrieves all teams stored in the database.
+     * Retrieves all teams stored in the database with pagination.
      *
-     * @return A list containing all Team objects representing existing teams.
+     * @param page The page number to retrieve (0-indexed).
+     * @param size The number of teams per page.
+     * @return A paginated list of Team objects representing existing teams.
      */
     @GetMapping
-    public ResponseEntity<?> getAllTeam () {
-        return teamService.getAllTeam();
+    public ResponseEntity<?> getAllTeam (@RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        return teamService.getAllTeam(pageable);
     }
 
     /**
