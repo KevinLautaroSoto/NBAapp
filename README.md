@@ -16,22 +16,26 @@
 
 * **Endpoints:**
   * **Players:**
-    * `GET /nbaApp/api/v1/player`: Get a list of all players
-    * `GET /nbaApp/api/v1/player/{id}`: Get detailed information about a player
-    * `POST /nbaApp/api/v1/player`: Create a new player
-    * `PATCH /nbaApp/api/v1/player/{id}`: Update an existing player
-    * `DELETE /nbaApp/api/v1/player/{id}`: Delete a player
+    * `POST /nbaApp/api/v1/player`: Crea un nuevo jugador.
+    * `GET /nbaApp/api/v1/player`: Obtiene una lista paginada de todos los jugadores (**soporta filtrado por nombre**).
+    * `GET /nbaApp/api/v1/player/{id}`: Obtiene información detallada sobre un jugador.
+    * `PUT /nbaApp/api/v1/player/{id}`: Actualiza un jugador existente.
+    * `PATCH /nbaApp/api/v1/player/{id}`: Actualiza parcialmente un jugador existente.
+    * `DELETE /nbaApp/api/v1/player/{id}`: Elimina un jugador.
+    * `GET /nbaApp/api/v1/player/name/{name}`: Busca jugadores por parte de su nombre (sin distinción de mayúsculas y minúsculas).
   * **Teams:**
-    * `GET /nbaApp/api/v1/team`: Get a list of all teams
-    * `GET /nbaApp/api/v1/team/{id}`: Get detailed information about a team
-    * `POST /nbaApp/api/v1/team`: Create a new team
-    * `PATCH /nbaApp/api/v1/team/{id}`: Update an existing team
-    * `DELETE /nbaApp/api/v1/team/{id}`: Delete a team
+    * `POST /nbaApp/api/v1/team`: Crea un nuevo equipo.
+    * `GET /nbaApp/api/v1/team`: Obtiene una lista paginada de todos los equipos (**soporta filtrado por nombre**).
+    * `GET /nbaApp/api/v1/team/{id}`: Obtiene información detallada sobre un equipo.
+    * `PUT /nbaApp/api/v1/team/{update/{id}}`: Actualiza un equipo existente.
+    * `PATCH /nbaApp/api/v1/team/patch/{id}`: Actualiza parcialmente un equipo existente.
+    * `DELETE /nbaApp/api/v1/team/{id}`: Elimina un equipo.
+    * `GET /nbaApp/api/v1/team/name/{name}`: Busca equipos por parte de su nombre (sin distinción de mayúsculas y minúsculas).
 
 * **Functionalities:**
-  * Search players by name or team
-  * Filter players by position, age, etc.
-  * Create, update, and delete players and teams
+  * Ability to create, update, and delete players and teams.
+  * Pagination for retrieving large datasets efficiently (both players and teams).
+  * Basic search functionalities by name (players and teams).
 
 ## Running the Application
 
